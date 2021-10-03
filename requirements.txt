@@ -1,0 +1,7 @@
+numpy
+pandas
+re
+spacy
+sklearn
+
+!python -m spacy download en_core_web_md
