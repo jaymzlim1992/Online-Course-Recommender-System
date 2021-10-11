@@ -8,6 +8,7 @@ import pandas as pd
 import pickle
 import sqlite3
 import time
+from sklearn.metrics.pairwise import cosine_similarity
 
 
 def recommend(user_input, rating_data, tfidf_weight, sim_thres, rank_batch_size):
@@ -21,7 +22,7 @@ def recommend(user_input, rating_data, tfidf_weight, sim_thres, rank_batch_size)
     text_input = user_input[0]
     text_processed = text_preprocess(text_input)
     tfidf_vect = tfidf_vectorize(text_processed)
-    tfidf_sim = cal_sim(tfidf_vect, tfidf_data)
+    tfidf_sim = cosine_similarity(tfidf_vect, tfidf_data).ravel()
 
     # 2. Feature Extraction - Categorical Based (One-Hot Encoded)
     # Load Categorical One-Hot Encoded Sparse Matrix
@@ -32,7 +33,7 @@ def recommend(user_input, rating_data, tfidf_weight, sim_thres, rank_batch_size)
     # Categroical Input and Similarity Score
     categorical_input = user_input[1:]
     categorical_vect = categorical_encode(categorical_input)
-    categorical_sim = cal_sim(categorical_vect, categorical_data)
+    categorical_sim = cond_sim(categorical_vect, categorical_data).ravel()
 
     # 3. Calculate Weighted Similarity Score
     w1 = tfidf_weight
@@ -59,7 +60,7 @@ sqlite_conn.close()
 
 
 start = time.time()
-tryinput = ['python', 1, 1, 1]
+tryinput = ['python', 0, 0, 1]
 trysim, tryoutput, tryid = recommend(tryinput, rating, 0.8, 0.2, 10)
 print(tryoutput.shape)
 print(trysim[:10])

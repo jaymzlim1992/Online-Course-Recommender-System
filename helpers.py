@@ -39,10 +39,10 @@ def text_preprocess(rawtext):
 # Returns one-hot encoded features.
 def categorical_encode(categorical_input):
     encode = np.zeros((1, 8))
-    # Binary Encode Course Difficulty (0 - No Preference, 1 - Introductory, 2 - Intermediate, 3 - Advanced)
+    # Binary Encode Course Duration (0 - No Preference, 1 - Short, 2 - Medium, 3 - Long)
     if categorical_input[0] > 0:
         encode[0, categorical_input[0] - 1] = 1
-    # Binary Encode Course Duration (0 - No Preference, 1 - Short, 2 - Medium, 3 - Long)
+    # Binary Encode Course Difficulty (0 - No Preference, 1 - Introductory, 2 - Intermediate, 3 - Advanced)
     if categorical_input[1] > 0:
         encode[0, categorical_input[1] + 2] = 1
     # Binary Encode Course Free Option Availability (0 - No, 1 - Yes)
@@ -64,8 +64,26 @@ def tfidf_vectorize(text):
 
 # 4) Cosine Similarity:
 # Takes 2 vectors and calculate cosine similarity
-def cal_sim(input_vec, data_vec):
-    sim = cosine_similarity(input_vec, data_vec).ravel()
+def cond_sim(input_vec, data_vec):
+    input_diff = input_vec[:, :3]
+    input_durr = input_vec[:, 3:6]
+    input_free = input_vec[:, 6:]
+    data_diff = data_vec[:, :3]
+    data_durr = data_vec[:, 3:6]
+    data_free = data_vec[:, 6:]
+    if (input_diff.sum() + input_durr.sum()) == 0:
+        input_slice = input_free
+        data_slice = data_free
+    elif input_diff.sum() == 0:
+        input_slice = np.hstack((input_durr, input_free))
+        data_slice = np.hstack((data_durr, data_free))
+    elif input_durr.sum() == 0:
+        input_slice = np.hstack((input_diff, input_free))
+        data_slice = np.hstack((data_diff, data_free))
+    else:
+        input_slice = input_vec
+        data_slice = data_vec
+    sim = cosine_similarity(input_slice, data_slice)
     return sim
 
 
