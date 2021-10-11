@@ -46,7 +46,7 @@ def recommend(user_input, rating_data, tfidf_weight, sim_thres, rank_batch_size)
     # 5. Apply Batch Ranking using rating data
     rec_id = batch_rank(sorted_id, rating_data, rank_batch_size)
 
-    return sorted_sim, sorted_id
+    return sorted_sim, sorted_id, rec_id
 
 
 filename = './feature_data/Course_Database.db'
@@ -60,7 +60,7 @@ sqlite_conn.close()
 
 start = time.time()
 tryinput = ['python', 1, 1, 1]
-trysim, tryoutput = recommend(tryinput, rating, 0.8, 0.2, 10)
+trysim, tryoutput, tryid = recommend(tryinput, rating, 0.8, 0.2, 10)
 print(tryoutput.shape)
 print(trysim[:10])
 print(tryoutput[:10])

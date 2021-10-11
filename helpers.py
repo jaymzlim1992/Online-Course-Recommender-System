@@ -4,9 +4,7 @@
 import numpy as np
 import re
 import pickle
-
 from sklearn.metrics.pairwise import cosine_similarity
-
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import word_tokenize
