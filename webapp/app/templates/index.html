@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block navbar %}
+    {% include 'jumbo.html' %}
+{% endblock %}
+
+{% block app_content %}
+
+    <h3>Here are some popular top-ranked courses you might like:</h3>
+
+        {% for course in defaultCourseList %}
+            <div class="container-fluid">
+                <div class="panel panel-default" style="border:1px solid">
+                    <div class="row justify-content-center">
+                        <div class="col-md-4">
+                            <img class="panel-img rounded" src={{course.imageLink}} alt="Card image cap">
+                        </div>
+                        <div class="col-md-8">
+                        <div class="panel-heading">
+                                <h3 class="panel-title">{{ course.title }}</h3>
+                                <h6>{{ course.platform }} | offered by {{course.provider}}</h6>
+                        </div>
+                        <div class="panel-body">
+                            <div class="col-md-9">
+                                <h6>Language: {{ course.language }} | Subtitles: {{course.subtitle}}</h6>
+                                <h6>Difficulty: {{ course.difficulty }}</h6>
+                                <h6>Duration: {{ course.duration }}</h6>
+                                <h6>{{ course.freeOption }}</h6>
+                            </div>
+                            <div class="col-md-3">
+                                <a href="{{ course.link }}" class="btn btn-primary pull-right">More info</a>
+                                {% if home%}
+                                    {% if course.courseId in favList %}
+                                        <button class="btn btn-default swap pull-right">
+                                            <span class="glyphicon glyphicon-heart" style="color:red;box-shadow:none;"></span>
+                                        </button>
+                                        <input type="button" value="Unlike" class="unlike" id="unlike_{{course.courseId}}" />
+                                    {% else %}
+                                        <button class="btn btn-default swap pull-right">
+                                            <span class="glyphicon glyphicon-heart-empty" style="box-shadow:none;"></span>
+                                        </button>
+                                        <input type="button" value="Like" class="like" id="like_{{course.courseId}}" />
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+
+{% endblock %}
