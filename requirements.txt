@@ -1,7 +1,6 @@
 numpy
 pandas
-re
-spacy
 sklearn
+nltk
 
 !python -m spacy download en_core_web_md

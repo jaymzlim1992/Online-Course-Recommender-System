@@ -2,80 +2,70 @@
 # Initialize Library Setup
 
 import numpy as np
-import pandas as pd
 import re
-import spacy
 import pickle
-from collections import Counter
+
 from sklearn.metrics.pairwise import cosine_similarity
 
+from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer
+from nltk.tokenize import word_tokenize
 
 # 1) Text Preprocessing
+# Initilization
+stopwordsdic = stopwords.words('english')
+lemmatizer = WordNetLemmatizer()
+
+
 # Takes any rawtext as input and apply text preprocessing:
-#  - remove all non-ASCII characters
-#  - lower-casing all text
-#  - apply spacy preprocessing pipeline and extract word with tags PROPN, NOUN, VERB
-#  - return list of lemmatized tokens
-
+#   - remove all non-ASCII characters
+#   - lower-casing all text and remove unecessary spaces
+#   - remove punctuations
+#   - remove stopwords
+#   - lemmatize words
+#   - create bag-of-words (bow) strings
 def text_preprocess(rawtext):
-    tokens = []
-    tags = ['PROPN', 'NOUN', 'VERB']
-    nlp = spacy.load('en_core_web_md')
-
-    text = re.sub('([^\x00-\x7F])+', '', rawtext)
-    text = text.lower()
-    doc = nlp(text)
-    for token in doc:
-        if token.pos_ in tags:
-            tokens.append(token.lemma_)
-    return np.array(tokens)
+    text = re.sub('([^\x00-\x7F])+', '', rawtext)  # Remove all non ASCII characters
+    text = text.lower()  # lower casing all words
+    text = text.strip()  # Remove White Spaces
+    text = re.sub('[^A-Za-z0-9]+', ' ', text)  # Remove Punctuations
+    text = word_tokenize(text)  # Tokenize
+    text = [word for word in text if word not in stopwordsdic]  # Remove stopwords
+    text = [lemmatizer.lemmatize(word) for word in text]  # Lemmatize words
+    bow = ' '.join(text)  # Create Bag-of-Words
+    return bow
 
 
 # 2) Encoding User Input Features:
 # Takes list of categorical data (course difficulty, course duration and course free option) as input
 # Returns one-hot encoded features.
-
 def categorical_encode(categorical_input):
     encode = np.zeros((1, 8))
-    # Binary Encode Course Difficulty (0 - Introductory, 1 - Intermediate, 2 - Advanced)
-    if not(pd.isna(categorical_input[0])):
-        encode[0, categorical_input[0]] = 1
-    # Binary Encode Course Duration (0 - Short, 1 - Medium, 2 - Long)
-    if not(pd.isna(categorical_input[1])):
-        encode[0, categorical_input[1] + 3] = 1
+    # Binary Encode Course Difficulty (0 - No Preference, 1 - Introductory, 2 - Intermediate, 3 - Advanced)
+    if categorical_input[0] > 0:
+        encode[0, categorical_input[0] - 1] = 1
+    # Binary Encode Course Duration (0 - No Preference, 1 - Short, 2 - Medium, 3 - Long)
+    if categorical_input[1] > 0:
+        encode[0, categorical_input[1] + 2] = 1
     # Binary Encode Course Free Option Availability (0 - No, 1 - Yes)
-    if not(pd.isna(categorical_input[2])):
-        encode[0, categorical_input[2] + 6] = 1
+    encode[0, categorical_input[2] + 6] = 1
     return encode
 
 
 # 3) TfIdf Vectorizer:
 # Takes list of tokens as input and apply TfIdf Vectorization based on the pretrained dictionary.
-df_dict_filepath = 'feature_data/df_dict.pickle'
-tfidf_feature_filepath = 'feature_data/tfidf_feature.pickle'
-
-
-def tfidf_vectorize(tokens):
-    tfidf_feature = pickle.load(open(tfidf_feature_filepath, 'rb'))
-    num_doc = tfidf_feature.shape[0]
-
-    df_dict = pickle.load(open(df_dict_filepath, 'rb'))
-    df_dict_vocab = list(df_dict.keys())
-    df_dict_size = len(df_dict_vocab)
-
-    tfidf = np.zeros((1, df_dict_size))
-    counter = Counter(tokens)
-    for word in list(counter.keys()):
-        if word in df_dict_vocab:
-            tf = counter[word]/len(tokens)
-            idf = np.log(num_doc / (df_dict[word] + 1)) + 1  # Adding 1's to avoid division with 0
-            tfidf[0, df_dict_vocab.index(word)] = tf * idf
+def tfidf_vectorize(text):
+    # Load Tfidf Vectorizer
+    tfidf_vectorizer_filepath = './feature_data/tfidf_vectorizer.pickle'
+    vectorizer_file = open(tfidf_vectorizer_filepath, 'rb')
+    vectorizer = pickle.load(vectorizer_file)
+    vectorizer_file.close()
+    tfidf = vectorizer.transform([text])
     return tfidf
 
 
 # 4) Cosine Similarity:
 # Takes 2 vectors and calculate cosine similarity
-
 def cal_sim(input_vec, data_vec):
     sim = cosine_similarity(input_vec, data_vec).ravel()
     return sim
@@ -86,14 +76,12 @@ def cal_sim(input_vec, data_vec):
 # Filters score that above threshold
 # Returns course IDs
 def sortnfilter(sim_scores, thres):
-    # Sort
+    # Sort similarity score in descending order
     sort_idx = np.argsort(sim_scores)[::-1]
     sim_sorted = sim_scores[sort_idx]
-
     # Filters score that are above threshold
-    sort_idx_filtered = sort_idx[sim_sorted > thres]
-
-    return sort_idx_filtered
+    sort_idx_thres = sort_idx[sim_sorted > thres]
+    return sort_idx_thres
 
 
 # 6) Batch Ranking
