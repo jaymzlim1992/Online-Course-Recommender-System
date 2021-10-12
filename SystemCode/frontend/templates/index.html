@@ -8,12 +8,12 @@
 
     <h3>Here are some popular top-ranked courses you might like:</h3>
 
-        {% for course in defaultCourseList %}
+        {% for course in defaultcourselist %}
             <div class="container-fluid">
                 <div class="panel panel-default" style="border:1px solid">
                     <div class="row justify-content-center">
                         <div class="col-md-4">
-                            <img class="panel-img rounded" src={{course.imageLink}} alt="Card image cap">
+                            <img class="panel-img rounded" src={{course.image_url}} alt="Card image cap">
                         </div>
                         <div class="col-md-8">
                         <div class="panel-heading">
@@ -25,21 +25,21 @@
                                 <h6>Language: {{ course.language }} | Subtitles: {{course.subtitle}}</h6>
                                 <h6>Difficulty: {{ course.difficulty }}</h6>
                                 <h6>Duration: {{ course.duration }}</h6>
-                                <h6>{{ course.freeOption }}</h6>
+                                <h6>{{ course.free_option }}</h6>
                             </div>
                             <div class="col-md-3">
-                                <a href="{{ course.link }}" class="btn btn-primary pull-right">More info</a>
+                                <a href="{{course.url}}" class="btn btn-primary pull-right">More info</a>
                                 {% if home%}
-                                    {% if course.courseId in favList %}
+                                    {% if course.courseID in favlist %}
                                         <button class="btn btn-default swap pull-right">
                                             <span class="glyphicon glyphicon-heart" style="color:red;box-shadow:none;"></span>
                                         </button>
-                                        <input type="button" value="Unlike" class="unlike" id="unlike_{{course.courseId}}" />
+                                        <input type="button" value="Unlike" class="unlike" id="unlike_{{course.courseID}}" />
                                     {% else %}
                                         <button class="btn btn-default swap pull-right">
                                             <span class="glyphicon glyphicon-heart-empty" style="box-shadow:none;"></span>
                                         </button>
-                                        <input type="button" value="Like" class="like" id="like_{{course.courseId}}" />
+                                        <input type="button" value="Like" class="like" id="like_{{course.courseID}}" />
                                     {% endif %}
                                 {% endif %}
                             </div>

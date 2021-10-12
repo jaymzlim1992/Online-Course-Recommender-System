@@ -9,7 +9,7 @@ from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import word_tokenize
 
-from SystemCode.config import basedir
+from SystemCode import config
 
 
 # 1) Text Preprocessing
@@ -57,8 +57,7 @@ def categorical_encode(categorical_input):
 # Takes list of tokens as input and apply TfIdf Vectorization based on the pretrained dictionary.
 def tfidf_vectorize(text):
     # Load Tfidf Vectorizer
-    tfidf_vectorizer_filepath = basedir + '/recommendation/featurematrix/tfidf_vectorizer.pickle'
-    vectorizer_file = open(tfidf_vectorizer_filepath, 'rb')
+    vectorizer_file = open(config.tfidf_vectorizer_filepath, 'rb')
     vectorizer = pickle.load(vectorizer_file)
     vectorizer_file.close()
     tfidf = vectorizer.transform([text])

@@ -20,10 +20,10 @@
         <div class="row">
             <h1>Favourited courses</h1>
         </div>
-        {% if favCourseList|length == 0 %}
+        {% if fav_list|length == 0 %}
             <h5>You do not have any favourite courses.</h5>
         {% endif %}
-        {% for course in favCourseList %}
+        {% for course in fav_list %}
             <div class="container-fluid">
                 <div class="row">
                     <div class="panel panel-default" style="border:1px solid">
@@ -40,7 +40,7 @@
                                 <p>Language: {{ course.language }} | Subtitles: {{course.subtitle}}</p>
                                 <p>Difficulty: {{ course.difficulty }}</p>
                                 <p>Duration: {{ course.duration }}</p>
-                                <p>{{ course.freeOption }}</p>
+                                <p>{{ course.free_option }}</p>
                                 <a href="{{ course.link }}" class="btn btn-primary">More info</a>
                                 <button id="swapHeart" class="btn btn-default swap">
                                     <span class="glyphicon glyphicon-heart" style="color:red;box-shadow:none;"></span>

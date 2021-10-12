@@ -8,9 +8,9 @@
     {% if results %} <!-- to display the results of a new search -->
         <h3>Here are the recommended courses based on your search:</h3>
     {% else %} <!-- to display the results (course and details) of a past search in a searchId -->
-        <h3>Here are the courses recommended in search {{ searchCount }}:</h3>
+        <h3>Here are the courses recommended in search {{ query_count }}:</h3>
     {% endif %}
-        {% for course in recCourseList %}
+        {% for course in rec_list %}
             <div class="container-fluid">
                 <div class="panel panel-default" style="border:1px solid">
                     <div class="row justify-content-center">
@@ -27,11 +27,11 @@
                                 <h6>Language: {{ course.language }} | Subtitles: {{course.subtitle}}</h6>
                                 <h6>Difficulty: {{ course.difficulty }}</h6>
                                 <h6>Duration: {{ course.duration }}</h6>
-                                <h6>{{ course.freeOption }}</h6>
+                                <h6>{{ course.free_option }}</h6>
                             </div>
                             <div class="col-md-3">
                                 <a href="{{ course.link }}" class="btn btn-primary pull-right">More info</a>
-                                {% if course.courseId in favList%}
+                                {% if course.courseID in favlist%}
                                     <button class="btn btn-default swap pull-right">
                                         <span class="glyphicon glyphicon-heart" style="color:red;box-shadow:none;"></span>
                                     </button>

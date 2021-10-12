@@ -19,22 +19,22 @@
 
     <h3>Here are your past searches:</h3>
 
-        {% for search in historySearches %}
+        {% for query in history_queries %}
             <div class="container">
                 <div class="panel panel-default" style="border:1px solid">
                     <div class="row text-center">
                         <div class="col-md-4">
-                            <h2>Search: {{ search.searchCount }}</h2>
+                            <h2>Search: {{ query.query_count }}</h2>
                         </div>
                         <div class="panel-body text-left">
                             <div class="col-md-4">
-                                <h4>Topic: {{ search.topic }}</h4>
-                                <h4>Duration: {{  search.duration  }}</h4>
+                                <h4>Topic: {{ query.query_text }}</h4>
+                                <h4>Duration: {{  query.query_duration  }}</h4>
                             </div>
                             <div class="col-md-4">
-                                <h4>Difficulty: {{ search.difficulty }}</h4>
-                                <h4>Free/Paid: {{  search.freePaid  }}</h4>
-                                <a href="/history/{{ search.searchCount }}" class="btn btn-primary pull-right">More Details</a>
+                                <h4>Difficulty: {{ query.query_difficulty }}</h4>
+                                <h4>Free/Paid: {{  query.query_free_option  }}</h4>
+                                <a href="/history/{{ query.query_count }}" class="btn btn-primary pull-right">More Details</a>
                             </div>
                         </div>
                         </div>

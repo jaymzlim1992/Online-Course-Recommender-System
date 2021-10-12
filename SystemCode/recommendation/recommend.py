@@ -3,20 +3,18 @@
 
 # Initialize Library Setup
 import pickle
+import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 
 from SystemCode.recommendation import utils
-from SystemCode.config import basedir
-from SystemCode.config import alpha
-from SystemCode.config import batch_size
+from SystemCode import config
 
 
 # Recommend Function
 def recommend(user_input, rating_data):
     # 1. Feature Extraction - Text Based (TfIdf)
     # Load Tfidf Data Sparse Matrix
-    tfidf_data_filepath = basedir + '/recommendation/featurematrix/tfidf_data.pickle'
-    tfidf_data_file = open(tfidf_data_filepath, 'rb')
+    tfidf_data_file = open(config.tfidf_data_filepath, 'rb')
     tfidf_data = pickle.load(tfidf_data_file)
     tfidf_data_file.close()
     # Text Input and Similarity Score
@@ -27,8 +25,8 @@ def recommend(user_input, rating_data):
 
     # 2. Feature Extraction - Categorical Based (One-Hot Encoded)
     # Load Categorical One-Hot Encoded Sparse Matrix
-    categorical_data_filepath = basedir + '/recommendation/featurematrix/categorical_data.pickle'
-    categorical_data_file = open(categorical_data_filepath, 'rb')
+
+    categorical_data_file = open(config.categorical_data_filepath, 'rb')
     categorical_data = pickle.load(categorical_data_file)
     categorical_data_file.close()
     # Categroical Input and Similarity Score
@@ -37,7 +35,7 @@ def recommend(user_input, rating_data):
     categorical_sim = utils.cond_sim(categorical_vect, categorical_data).ravel()
 
     # 3. Calculate Weighted Similarity Score
-    w1 = alpha
+    w1 = config.alpha
     w2 = round(1 - w1, 2)
     sim = (w1 * tfidf_sim) + (w2 * categorical_sim)
 
@@ -47,6 +45,12 @@ def recommend(user_input, rating_data):
     sorted_sim = sim[sorted_id]
 
     # 5. Apply Batch Ranking using rating data
-    rec_id = utils.batch_rank(sorted_id, rating_data, batch_size)
+    rec_id = utils.batch_rank(sorted_id, rating_data, config.batch_size)[:config.recommend_topn]
 
     return sorted_sim, sorted_id, rec_id
+
+
+def recommend_default(rating_data):
+    sort_idx = np.argsort(rating_data)[::-1]
+    default_course = sort_idx[:config.recommend_default_topn]
+    return default_course

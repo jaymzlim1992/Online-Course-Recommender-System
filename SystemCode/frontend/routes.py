@@ -1,31 +1,34 @@
-from flask import render_template, flash, redirect, url_for, request,jsonify
+from flask import render_template, flash, redirect, url_for, request, jsonify
 from flask_login import login_user, login_required, current_user, logout_user
 
-from app import app,bcrypt,db
-from app.forms import SignupForm, LoginForm, SurveyForm
-from app.models import User, Preference, Course, Favourites, Recommendations
+from SystemCode.frontend import app, bcrypt, db
+from SystemCode.frontend.forms import SignupForm, LoginForm, SurveyForm
+from SystemCode.frontend.models import User, Query, Course, Favourite, Recommendation
+
 
 default10 = [1,200,300,400,500,600,700,1800,2900,5000]
+
 
 @app.route('/')
 def index():
     if current_user.is_authenticated:
         return redirect(url_for('home'))
     title = 'MOOC Recommender'
-    defaultCourseList = []
+    defaultcourselist = []
     for item in default10:
-        # Append the course details by courseId
-        defaultCourseList.append(Course.query.filter_by(courseId=item).first())
+        # Append the course details by courseID
+        defaultcourselist.append(Course.query.filter_by(courseID=item).first())
     difficulty = {0: "Beginner", 1: "Intermediate", 2: "Advanced"}
     duration = {0: "Short", 1: "Medium", 2: "Long"}
-    freeOption = {0: "Paid", 1: "Free"}
+    free_option = {0: "Paid", 1: "Free"}
     platform = {0: "Edx", 1: "Udemy", 2: "Coursera"}
-    for course in defaultCourseList:
+    for course in defaultcourselist:
         course.difficulty = difficulty.get(course.difficulty, "Unknown")
         course.duration = duration.get(course.duration, "Unknown")
-        course.freeOption = freeOption.get(course.freeOption, "Unknown")
+        course.free_option = free_option.get(course.free_option, "Unknown")
         course.platform = platform.get(course.platform, "Unknown")
-    return render_template('index.html', title=title,  defaultCourseList=defaultCourseList, index=True)
+    return render_template('index.html', title=title,  defaultcourselist=defaultcourselist, index=True)
+
 
 @app.route('/home')
 @login_required
@@ -33,27 +36,28 @@ def home():
     if not current_user.is_authenticated:
         return redirect(url_for('/'))
     title = 'MOOC Recommender'
-    id = current_user.id
-    defaultCourseList = []
+    current_id = current_user.userID
+    defaultcourselist = []
     for item in default10:
-        #Append the course details by courseId
-        defaultCourseList.append(Course.query.filter_by(courseId=item).first())
-    difficulty = {0:"Beginner", 1:"Intermediate",2:"Advanced"}
-    duration = {0:"Short", 1:"Medium", 2:"Long"}
-    freeOption = {0:"Paid", 1:"Free"}
-    platform = {0:"Edx", 1:"Udemy", 2:"Coursera"}
-    favourites = Favourites().query.filter_by(id=id)
-    favList = []
-    for item in favourites:
-        favList.append(item.courseId)
-    for course in defaultCourseList:
+        # Append the course details by courseID
+        defaultcourselist.append(Course.query.filter_by(courseID=item).first())
+    difficulty = {0: "Beginner", 1: "Intermediate", 2: "Advanced"}
+    duration = {0: "Short", 1: "Medium", 2: "Long"}
+    free_option = {0: "Paid", 1: "Free"}
+    platform = {0: "Edx", 1: "Udemy", 2: "Coursera"}
+    fav_query = Favourite().query.filter_by(userID=current_id)
+    favlist = []
+    for item in fav_query:
+        favlist.append(item.courseID)
+    for course in defaultcourselist:
         course.difficulty = difficulty.get(course.difficulty, "Unknown")
         course.duration = duration.get(course.duration, "Unknown")
-        course.freeOption = freeOption.get(course.freeOption, "Unknown")
+        course.free_option = free_option.get(course.free_option, "Unknown")
         course.platform = platform.get(course.platform, "Unknown")
-    return render_template('index.html', title=title, defaultCourseList=defaultCourseList, favList=favList, home=True)
+    return render_template('index.html', title=title, defaultcourselist=defaultcourselist, favlist=favlist, home=True)
 
-@app.route('/signup', methods=['GET','POST'])
+
+@app.route('/signup', methods=['GET', 'POST'])
 def signup():
     title = 'User sign up'
     form = SignupForm()
@@ -61,12 +65,12 @@ def signup():
         name = form.name.data
         username = form.username.data
         password = bcrypt.generate_password_hash(form.password.data)
-        user = User(name=name, username=username,password=password)
+        user = User(name=name, username=username, password=password)
         db.session.add(user)
         db.session.commit()
         flash('Successfully registered!', category='success')
         return redirect(url_for('home'))
-    return render_template('signup.html',form=form,title=title,signup=True)
+    return render_template('signup.html', form=form, title=title, signup=True)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -81,136 +85,144 @@ def login():
         remember = form.remember.data
         user = User.query.filter_by(username=username).first()
         if user and bcrypt.check_password_hash(user.password, password):
-            login_user(user, remember = remember)
+            login_user(user, remember=remember)
             flash('Login successful. Welcome back!', category='info')
             if request.args.get('next'):
-                next_page =request.args.get('next')
+                next_page = request.args.get('next')
                 return redirect(next_page)
             return redirect(url_for('home'))
         flash('User not exists or password not match', category='danger')
-
     return render_template('login.html', title=title, form=form, login=True)
 
-@app.route('/preferences', methods=['GET','POST'])
+
+@app.route('/query', methods=['GET', 'POST'])
 def preferences():
     title = 'Personalized course recommendations'
     form = SurveyForm()
     if form.validate_on_submit():
-        id = current_user.id
-        count = Preference.query.filter_by(id=id).order_by(Preference.searchCount.desc()).first()
-        if count == None:
-            searchCount = 0
+        current_id = current_user.userID
+        count = Query.query.filter_by(userID=current_id).order_by(Query.query_count.desc()).first()
+        if count is None:
+            query_count = 0
         else:
-            searchCount = int(count.searchCount)
-        topic = form.topic.data
-        duration = form.duration.data
-        difficulty = form.difficulty.data
-        freePaid = form.freePaid.data
-        preference = Preference(id=id, searchCount=searchCount+1, topic=topic,duration=duration,difficulty=difficulty,freePaid=freePaid)
-        db.session.add(preference)
+            query_count = int(count.query_count)
+        query_text = form.topic.data
+        query_duration = form.duration.data
+        query_difficulty = form.difficulty.data
+        query_free_option = form.freePaid.data
+        query = Query(userID=current_id, query_count=query_count+1, query_text=query_text,
+                      query_duration=query_duration, query_difficulty=query_difficulty,
+                      query_free_option=query_free_option)
+        db.session.add(query)
         db.session.commit()
         flash('Got your preferences!', category='success')
         return redirect(url_for('results'))
-    return render_template('preferences.html',form=form,title=title,preferences=True)
+    return render_template('query.html', form=form, title=title, preferences=True)
 
-@app.route('/results', methods=['GET','POST'])
+
+@app.route('/results', methods=['GET', 'POST'])
 def results():
-    id = current_user.id
-    recommendations = Recommendations().query.filter_by(id=id).order_by(Recommendations.searchCount.desc()).order_by(
-        Recommendations.ranking.asc())
-    recCourseList = []
+    current_id = current_user.userID
+    recommendations = Recommendation().query.filter_by(userID=current_id).order_by(Recommendation.query_count.desc()).\
+        order_by(Recommendation.ranking.asc())
+    rec_list = []
     for item in recommendations:
-        # Append the course details by courseId
-        recCourseList.append(Course.query.filter_by(courseId=item.courseId).first())
+        # Append the course details by courseID
+        rec_list.append(Course.query.filter_by(courseID=item.courseID).first())
     difficulty = {1: "Beginner", 2: "Intermediate", 3: "Advanced"}
     duration = {1: "Short", 2: "Medium", 3: "Long"}
-    freeOption = {0: "Paid", 1: "Free"}
+    free_option = {0: "Paid", 1: "Free"}
     platform = {0: "Edx", 1: "Udemy", 2: "Coursera"}
-    favourites = Favourites().query.filter_by(id=id)
-    favList = []
-    for item in favourites:
-        favList.append(item.courseId)
-    for course in recCourseList:
+    fav_query = Favourite().query.filter_by(userID=current_id)
+    favlist = []
+    for item in fav_query:
+        favlist.append(item.courseID)
+    for course in rec_list:
         course.difficulty = difficulty.get(course.difficulty, "Unknown")
         course.duration = duration.get(course.duration, "Unknown")
-        course.freeOption = freeOption.get(course.freeOption, "Unknown")
+        course.free_option = free_option.get(course.free_option, "Unknown")
         course.platform = platform.get(course.platform, "Unknown")
-    return render_template('results.html', recCourseList=recCourseList, favList=favList)
+    return render_template('results.html', rec_list=rec_list, favlist=favlist)
 
-@app.route('/favourites', methods=['GET','POST'])
+
+@app.route('/favourites', methods=['GET', 'POST'])
 def favourites():
     title = 'My favourited courses'
-    id = current_user.id
-    favourites = Favourites().query.filter_by(id=id)
-    favCourseList = []
-    for item in favourites:
-        favCourseList.append(Course.query.filter_by(courseId=item.courseId).first())
-    difficulty = {0:"Beginner", 1:"Intermediate",2:"Advanced"}
-    duration = {0:"Short", 1:"Medium", 2:"Long"}
-    freeOption = {0:"Paid", 1:"Free"}
-    platform = {0:"Edx", 1:"Udemy", 2:"Coursera"}
-    for course in favCourseList:
+    current_id = current_user.userID
+    fav_query = Favourite().query.filter_by(userID=current_id)
+    fav_list = []
+    for item in fav_query:
+        fav_list.append(Course.query.filter_by(courseID=item.courseID).first())
+    difficulty = {0: "Beginner", 1: "Intermediate", 2: "Advanced"}
+    duration = {0: "Short", 1: "Medium", 2: "Long"}
+    free_option = {0: "Paid", 1: "Free"}
+    platform = {0: "Edx", 1: "Udemy", 2: "Coursera"}
+    for course in fav_list:
         course.difficulty = difficulty.get(course.difficulty, "Unknown")
         course.duration = duration.get(course.duration, "Unknown")
-        course.freeOption = freeOption.get(course.freeOption, "Unknown")
+        course.free_option = free_option.get(course.free_option, "Unknown")
         course.platform = platform.get(course.platform, "Unknown")
-    return render_template('favourites.html',title = title, favCourseList = favCourseList)
+    return render_template('favourites.html', title=title, fav_list=fav_list)
+
 
 @app.route('/history', methods=['GET'])
 def history():
     title = 'My past searches'
-    id = current_user.id
-    historySearches = Preference().query.filter_by(id=id).order_by(Preference.searchCount.desc())
-    #if len(historySearches) > 5:
+    current_id = current_user.userID
+    history_queries = Query().query.filter_by(userID=current_id).order_by(Query.query_count.desc())
+    # if len(historySearches) > 5:
     #    historySearches = historySearches[0:5]
-    freePaid = {0: "Free and paid courses", 1: "Only free courses"}
-    difficulty = {0:"Any", 1: "Beginner", 2: "Intermediate", 3: "Advanced"}
-    duration = {0:"Any", 1: "Short", 2: "Medium", 3: "Long"}
-    for search in historySearches:
-        search.difficulty = difficulty.get(search.difficulty, "Unknown")
-        search.duration = duration.get(search.duration, "Unknown")
-        search.freePaid = freePaid.get(search.freePaid, "Unknown")
-    return render_template('history.html', title=title, historySearches=historySearches)
+    query_free_option = {0: "Free and paid courses", 1: "Only free courses"}
+    query_difficulty = {0: "Any", 1: "Beginner", 2: "Intermediate", 3: "Advanced"}
+    query_duration = {0: "Any", 1: "Short", 2: "Medium", 3: "Long"}
+    for query in history_queries:
+        query.query_difficulty = query_difficulty.get(query.query_difficulty, "Unknown")
+        query.query_duration = query_duration.get(query.query_duration, "Unknown")
+        query.query_free_option = query_free_option.get(query.query_free_option, "Unknown")
+    return render_template('history.html', title=title, history_queries=history_queries)
 
-@app.route('/history/<int:searchCount>', methods=['GET'])
-def displayPastResult(searchCount):
+
+@app.route('/history/<int:query_count>', methods=['GET'])
+def displaypastresult(query_count):
     title = 'My past searches'
-    id = current_user.id
-    searchResult = Recommendations().query.filter_by(id=id).filter_by(searchCount=searchCount)
-    searchResultDetails = []
-    for item in searchResult:
-        # Append the course details by courseId
-        searchResultDetails.append(Course.query.filter_by(courseId=item.courseId).first())
-    freeOption = {0: "Paid", 1: "Free"}
+    current_id = current_user.userID
+    query_result = Recommendation().query.filter_by(userID=current_id).filter_by(query_count=query_count)
+    query_result_list = []
+    for item in query_result:
+        # Append the course details by courseID
+        query_result_list.append(Course.query.filter_by(courseID=item.courseID).first())
+    free_option = {0: "Paid", 1: "Free"}
     platform = {0: "Edx", 1: "Udemy", 2: "Coursera"}
-    difficulty = {0:"Any", 1: "Beginner", 2: "Intermediate", 3: "Advanced"}
-    duration = {0:"Any", 1: "Short", 2: "Medium", 3: "Long"}
-    for course in searchResultDetails:
+    difficulty = {0: "Any", 1: "Beginner", 2: "Intermediate", 3: "Advanced"}
+    duration = {0: "Any", 1: "Short", 2: "Medium", 3: "Long"}
+    for course in query_result_list:
         course.difficulty = difficulty.get(course.difficulty, "Unknown")
         course.duration = duration.get(course.duration, "Unknown")
-        course.freeOption = freeOption.get(course.freeOption, "Unknown")
+        course.free_option = free_option.get(course.free_option, "Unknown")
         course.platform = platform.get(course.platform, "Unknown")
-    favourites = Favourites().query.filter_by(id=id)
-    favList = []
-    for item in favourites:
-        favList.append(item.courseId)
-    return render_template('results.html', title=title, searchCount=searchCount, recCourseList=searchResultDetails,favList=favList)
+    fav_query = Favourite().query.filter_by(userID=current_id)
+    favlist = []
+    for item in fav_query:
+        favlist.append(item.courseID)
+    return render_template('results.html', title=title, query_count=query_count, rec_list=query_result_list,
+                           favlist=favlist)
 
-@app.route('/likeunlike',methods=['POST','GET'])
+
+@app.route('/likeunlike', methods=['POST', 'GET'])
 def likeunlike():
-    id = current_user.id
-    if request.method=='POST':
-        course_id=request.form['course_id']
-        type=request.form['type']
-        print(id)
-        print(type)
+    current_id = current_user.userID
+    if request.method == 'POST':
+        course_id = request.form['course_id']
+        req_type = request.form['type']
+        print(current_id)
+        print(req_type)
         print(course_id)
-        entry = Favourites(id=id,courseId=course_id)
-        if type=='1':
+        entry = Favourite(userID=current_id, courseID=course_id)
+        if req_type == '1':
             db.session.add(entry)
             db.session.commit()
-        if type=='0':
-            entry= Favourites.query.filter_by(id=id,courseId=course_id).first()
+        if req_type == '0':
+            entry = Favourite.query.filter_by(userID=current_id, courseID=course_id).first()
             db.session.delete(entry)
             db.session.commit()
     return jsonify('Success')
