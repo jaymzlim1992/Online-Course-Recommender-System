@@ -1,6 +1,6 @@
-# Helper functions for recommendation module
-# Initialize Library Setup
+# Utility functions for recommendation module
 
+# Initialize Library Setup
 import numpy as np
 import re
 import pickle
@@ -8,6 +8,9 @@ from sklearn.metrics.pairwise import cosine_similarity
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import word_tokenize
+
+from SystemCode.config import basedir
+
 
 # 1) Text Preprocessing
 # Initilization
@@ -54,7 +57,7 @@ def categorical_encode(categorical_input):
 # Takes list of tokens as input and apply TfIdf Vectorization based on the pretrained dictionary.
 def tfidf_vectorize(text):
     # Load Tfidf Vectorizer
-    tfidf_vectorizer_filepath = './feature_data/tfidf_vectorizer.pickle'
+    tfidf_vectorizer_filepath = basedir + '/recommendation/featurematrix/tfidf_vectorizer.pickle'
     vectorizer_file = open(tfidf_vectorizer_filepath, 'rb')
     vectorizer = pickle.load(vectorizer_file)
     vectorizer_file.close()
