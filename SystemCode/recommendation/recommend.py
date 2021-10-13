@@ -29,27 +29,35 @@ def recommend(user_input, rating_data, tfidf_vectorizer, tfidf_data, categorical
     # categorical_data = pickle.load(categorical_data_file)
     # categorical_data_file.close()
     # Categroical Input and Similarity Score
-    categorical_input = user_input[1:]
+    categorical_input = user_input[1:3]
     categorical_vect = utils.categorical_encode(categorical_input)
-    categorical_sim = utils.cond_sim(categorical_vect, categorical_data).ravel()
+    categorical_sim = utils.cond_sim(categorical_vect, categorical_data[:, :-1]).ravel()
 
-    # 3. Calculate Weighted Similarity Score
-    w1 = config.alpha
-    w2 = round(1 - w1, 2)
-    sim = (w1 * tfidf_sim) + (w2 * categorical_sim)
+    # 3. Recommendation Masks (Free vs Paid Courses Masks)
+    free_option_ind = user_input[-1]
+    free_option_data = categorical_data[:, -1]
+    thres_mask = (tfidf_sim > config.text_thres)
+    if free_option_ind == 1:
+        free_mask = ((free_option_data == 1) * thres_mask) == 1
+    else:
+        free_mask = (np.ones(tfidf_data.shape[0]) * thres_mask) == 1
+    paid_mask = ((np.ones(tfidf_data.shape[0]) * thres_mask) - free_mask) == 1
 
-    # 4. Sort Similarity and Filter by Threshold
-    sim_thres = w2
-    sorted_id = utils.sortnfilter(sim, sim_thres)
-    sorted_sim = sim[sorted_id]
+    # 4. Apply Masks and Rank by categorical_sim group and rating
+    rec_sim, rec_idx = utils.ranking(free_mask, tfidf_sim, categorical_sim, rating_data)
 
-    # 5. Apply Batch Ranking using rating data
-    rec_id = utils.batch_rank(sorted_id, rating_data, config.batch_size)[:config.recommend_topn]
+    # 5. Append paid courses if number of free courses below a threshold
+    if (free_mask.sum() < config.free_show_thres) and (paid_mask.sum() > 0):
+        paid_sim, paid_idx = utils.ranking(paid_mask, tfidf_sim, categorical_sim, rating_data)
+        rec_sim = np.append(rec_sim, paid_sim)
+        rec_idx = np.append(rec_idx, paid_idx)
 
-    # 6. Convert to courseID
-    rec_courses = [int(x+1) for x in rec_id]
+    # 6. Convert Index to courseID
+    rec_idx = rec_idx + 1
+    course_sim = rec_sim[:config.recommend_topn].tolist()
+    course_idx = rec_idx[:config.recommend_topn].tolist()
 
-    return rec_courses
+    return course_idx
 
 
 def recommend_default(rating_data):

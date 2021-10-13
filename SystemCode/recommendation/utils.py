@@ -41,15 +41,13 @@ def text_preprocess(rawtext):
 # Takes list of categorical data (course difficulty, course duration and course free option) as input
 # Returns one-hot encoded features.
 def categorical_encode(categorical_input):
-    encode = np.zeros((1, 8))
+    encode = np.zeros((1, 6))
     # Binary Encode Course Duration (0 - No Preference, 1 - Short, 2 - Medium, 3 - Long)
     if categorical_input[0] > 0:
         encode[0, categorical_input[0] - 1] = 1
     # Binary Encode Course Difficulty (0 - No Preference, 1 - Introductory, 2 - Intermediate, 3 - Advanced)
     if categorical_input[1] > 0:
         encode[0, categorical_input[1] + 2] = 1
-    # Binary Encode Course Free Option Availability (0 - No, 1 - Yes)
-    encode[0, categorical_input[2] + 6] = 1
     return encode
 
 
@@ -67,59 +65,44 @@ def tfidf_vectorize(text, vectorizer):
 # 4) Cosine Similarity:
 # Takes 2 vectors and calculate cosine similarity
 def cond_sim(input_vec, data_vec):
-    input_diff = input_vec[:, :3]
-    input_durr = input_vec[:, 3:6]
-    input_free = input_vec[:, 6:]
-    data_diff = data_vec[:, :3]
-    data_durr = data_vec[:, 3:6]
-    data_free = data_vec[:, 6:]
+    input_durr = input_vec[:, :3]
+    input_diff = input_vec[:, 3]
+    data_durr = data_vec[:, :3]
+    data_diff = data_vec[:, 3]
     if (input_diff.sum() + input_durr.sum()) == 0:
-        input_slice = input_free
-        data_slice = data_free
-    elif input_diff.sum() == 0:
-        input_slice = np.hstack((input_durr, input_free))
-        data_slice = np.hstack((data_durr, data_free))
+        sim = np.ones(data_vec.shape[0])
     elif input_durr.sum() == 0:
-        input_slice = np.hstack((input_diff, input_free))
-        data_slice = np.hstack((data_diff, data_free))
+        sim = cosine_similarity(input_diff, data_diff)
+    elif input_diff.sum() == 0:
+        sim = cosine_similarity(input_durr, data_durr)
     else:
-        input_slice = input_vec
-        data_slice = data_vec
-    sim = cosine_similarity(input_slice, data_slice)
+        sim = cosine_similarity(input_vec, data_vec)
     return sim
 
 
-# 5) Sorting Similarity Score and Filters score above threshold:
-# Sort a list of similarity score in descending order.
-# Filters score that above threshold
-# Returns course IDs
-def sortnfilter(sim_scores, thres):
-    # Sort similarity score in descending order
-    sort_idx = np.argsort(sim_scores)[::-1]
-    sim_sorted = sim_scores[sort_idx]
-    # Filters score that are above threshold
-    sort_idx_thres = sort_idx[sim_sorted > thres]
-    return sort_idx_thres
-
-
-# 6) Batch Ranking
+# 5) Ranking based on popularity index
 # Given a sorted and threshold filtered ID of recommendations
 # Batch rank for every batch_size of ID by rating.
-def batch_rank(sort_filtered_id, rating, batch_size):
-    num_batch = int(len(sort_filtered_id) / batch_size) + (len(sort_filtered_id) % batch_size > 0)
-    ranked = np.array([])
+def ranking(mask, text_sim, categorical_sim, rating):
+    target_idx = np.arange(text_sim.shape[0])[mask]
+    target_text_sim = text_sim[mask]
+    target_categorical_sim = categorical_sim[mask]
+    target_rating = rating[mask]
+    target_scores = sorted(np.unique(target_categorical_sim), reverse=True)
+    rec_idx = np.array([], dtype=int)
+    rec_sim = np.array([])
+    for score in target_scores:
+        group_mask = (target_categorical_sim == score)
+        group_idx = target_idx[group_mask]
+        group_text_sim = target_text_sim[group_mask]
+        group_rating = target_rating[group_mask]
+        group_sort_idx = np.argsort(group_rating)[::-1]
+        rec_idx = np.append(rec_idx, group_idx[group_sort_idx])
+        rec_sim = np.append(rec_sim, group_text_sim[group_sort_idx])
+    return rec_sim, rec_idx
 
-    for i in range(num_batch):
-        batch_id = sort_filtered_id[i*batch_size:min((i+1)*batch_size, len(sort_filtered_id))]
-        batch_rating = rating[batch_id]
-        batch_sort_idx = np.argsort(batch_rating)[::-1]
-        ranked_batch_id = batch_id[batch_sort_idx]
-        ranked = np.append(ranked, ranked_batch_id).astype(int)
 
-    return ranked
-
-
-# 7) Load-up Pickle Object Data Files
+# 6) Load-up Pickle Object Data Files
 def load_pickle(filename):
     data_file = open(filename, 'rb')
     data = pickle.load(data_file)

@@ -21,10 +21,10 @@ class WebappConfig(object):
 tfidf_data_filepath = os.path.join(basedir, 'recommendation/featurematrix/tfidf_data.pickle')
 categorical_data_filepath = os.path.join(basedir, 'recommendation/featurematrix/categorical_data.pickle')
 tfidf_vectorizer_filepath = os.path.join(basedir, 'recommendation/featurematrix/tfidf_vectorizer.pickle')
-# TEXT BASED RECOMMENDATION WEIGHT
-alpha = 0.8
-# BATCH RANKING SIZE
-batch_size = 10
+# TEXT BASED RECOMMENDATION THRESHOLD
+text_thres = 0
+# MINIMUM FREE COURSE COUNT THRESHOLD
+free_show_thres = 50
 # RECOMMENDATION RESULTS SIZE
 recommend_topn = 20
 # DEFAULT POPULAR RESULTS SIZE

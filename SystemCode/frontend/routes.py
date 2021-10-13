@@ -117,7 +117,7 @@ def login():
 
 @app.route('/query', methods=['GET', 'POST'])
 @login_required
-def preferences():
+def query():
     # Check if user is signed in
     if not current_user.is_authenticated:
         return redirect(url_for('/'))
@@ -140,6 +140,10 @@ def preferences():
                                   tfidf_vectorizer=tfidf_vectorizer, tfidf_data=tfidf_data,
                                   categorical_data=categorical_data)
 
+        # Check if there is any courses recommended
+        if len(query_courses) == 0:
+            flash('There are no courses found, please try again', category='warning')
+            return redirect(url_for('query'))
         # Update query session to Query database
         count = Query.query.filter_by(userID=current_id).order_by(Query.query_count.desc()).first()
         if count is None:
@@ -165,7 +169,7 @@ def preferences():
                                 query_difficulty=query_difficulty, query_free_option=query_free_option))
 
     # Renders query form
-    return render_template('query.html', form=form, title=title, preferences=True)
+    return render_template('query.html', form=form, title=title, query=True)
 
 
 @app.route('/results', methods=['GET', 'POST'])
@@ -185,7 +189,7 @@ def results():
     # Check if there is missing query inputs
     if (query_text is None) | (query_duration is None) | (query_difficulty is None) | (query_free_option is None):
         flash('Please fill in your preferences below', category='warning')
-        return redirect(url_for('preferences'))
+        return redirect(url_for('query'))
 
     # Infer recommendations
     query_input = [query_text, int(query_duration), int(query_difficulty), int(query_free_option)]
@@ -212,7 +216,7 @@ def results():
         course.duration = duration.get(course.duration, "Unknown")
         course.free_option = free_option.get(course.free_option, "Unknown")
         course.platform = platform.get(course.platform, "Unknown")
-    return render_template('results.html', rec_list=rec_list, favlist=favlist)
+    return render_template('results.html', rec_list=rec_list, favlist=favlist, query=True)
 
 
 @app.route('/favourites', methods=['GET', 'POST'])
@@ -238,7 +242,7 @@ def favourites():
         course.duration = duration.get(course.duration, "Unknown")
         course.free_option = free_option.get(course.free_option, "Unknown")
         course.platform = platform.get(course.platform, "Unknown")
-    return render_template('favourites.html', title=title, fav_list=fav_list)
+    return render_template('favourites.html', title=title, fav_list=fav_list, favourites=True)
 
 
 @app.route('/history', methods=['GET'])
@@ -261,7 +265,7 @@ def history():
         query.query_difficulty = query_difficulty.get(query.query_difficulty, "Unknown")
         query.query_duration = query_duration.get(query.query_duration, "Unknown")
         query.query_free_option = query_free_option.get(query.query_free_option, "Unknown")
-    return render_template('history.html', title=title, history_queries=history_queries)
+    return render_template('history.html', title=title, history_queries=history_queries, history=True)
 
 
 @app.route('/history/<int:query_count>', methods=['GET'])
@@ -300,7 +304,7 @@ def displaypastresult(query_count):
     for item in fav_query:
         favlist.append(item.courseID)
     return render_template('results.html', title=title, query_count=query_count, rec_list=query_result_list,
-                           favlist=favlist)
+                           favlist=favlist, history=True)
 
 
 @app.route('/likeunlike', methods=['POST', 'GET'])
