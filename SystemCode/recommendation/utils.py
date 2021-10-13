@@ -9,8 +9,6 @@ from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import word_tokenize
 
-from SystemCode import config
-
 
 # 1) Text Preprocessing
 # Initilization

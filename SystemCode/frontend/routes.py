@@ -261,10 +261,10 @@ def history():
     query_free_option = {0: "Free and paid courses", 1: "Only free courses"}
     query_difficulty = {0: "Any", 1: "Beginner", 2: "Intermediate", 3: "Advanced"}
     query_duration = {0: "Any", 1: "Short", 2: "Medium", 3: "Long"}
-    for query in history_queries:
-        query.query_difficulty = query_difficulty.get(query.query_difficulty, "Unknown")
-        query.query_duration = query_duration.get(query.query_duration, "Unknown")
-        query.query_free_option = query_free_option.get(query.query_free_option, "Unknown")
+    for ind_query in history_queries:
+        ind_query.query_difficulty = query_difficulty.get(ind_query.query_difficulty, "Unknown")
+        ind_query.query_duration = query_duration.get(ind_query.query_duration, "Unknown")
+        ind_query.query_free_option = query_free_option.get(ind_query.query_free_option, "Unknown")
     return render_template('history.html', title=title, history_queries=history_queries, history=True)
 
 

@@ -1,6 +1,6 @@
 {% block doc -%}
 <!DOCTYPE html>
-<html{% block html_attribs %}{% endblock html_attribs %}>
+<html>{% block html_attribs %}{% endblock html_attribs %}
 {%- block html %}
   <head>
     {%- block head %}
@@ -46,7 +46,7 @@
       });
     </script>
   </head>
-  <body{% block body_attribs %}{% endblock body_attribs %}>
+  <body>{% block body_attribs %}{% endblock body_attribs %}
     {% block body -%}
     {% block navbar %}
     {%- endblock navbar %}
