@@ -35,16 +35,19 @@
                                     <button class="btn btn-default swap pull-right">
                                         <span class="glyphicon glyphicon-heart" style="color:red;box-shadow:none;"></span>
                                     </button>
+                                    <input type="button" value="Unlike" class="unlike" id="unlike_{{course.courseID}}" />
                                 {% else %}
                                     <button class="btn btn-default swap pull-right">
                                         <span class="glyphicon glyphicon-heart-empty" style="box-shadow:none;"></span>
                                     </button>
+                                    <input type="button" value="Like" class="like" id="like_{{course.courseID}}" />
                                 {% endif %}
                             </div>
-                            </div>
+                        </div>
                         </div>
                     </div>
                 </div>
+            </div>
         {% endfor %}
 
 {% endblock %}
