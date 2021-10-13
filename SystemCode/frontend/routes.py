@@ -22,7 +22,7 @@ default_courses = recommend_default(rating_data)
 tfidf_vectorizer = utils.load_pickle(config.tfidf_vectorizer_filepath)
 tfidf_data = utils.load_pickle(config.tfidf_data_filepath)
 categorical_data = utils.load_pickle(config.categorical_data_filepath)
-recommend_courses = []
+
 
 # Landing Page Initilization
 @app.route('/')
@@ -113,39 +113,77 @@ def login():
 
 
 @app.route('/query', methods=['GET', 'POST'])
+@login_required
 def preferences():
+    if not current_user.is_authenticated:
+        return redirect(url_for('/'))
     title = 'Personalized course recommendations'
     form = SurveyForm()
     if form.validate_on_submit():
         current_id = current_user.userID
-        count = Query.query.filter_by(userID=current_id).order_by(Query.query_count.desc()).first()
-        if count is None:
-            query_count = 0
-        else:
-            query_count = int(count.query_count)
+        # count = Query.query.filter_by(userID=current_id).order_by(Query.query_count.desc()).first()
+        # if count is None:
+        #     query_count = 0
+        # else:
+        #     query_count = int(count.query_count)
         query_text = form.topic.data
         query_duration = form.duration.data
         query_difficulty = form.difficulty.data
         query_free_option = form.freePaid.data
-        query = Query(userID=current_id, query_count=query_count+1, query_text=query_text,
-                      query_duration=query_duration, query_difficulty=query_difficulty,
-                      query_free_option=query_free_option)
-        db.session.add(query)
-        db.session.commit()
+        # query_input = [query_text, int(query_duration), int(query_difficulty), int(query_free_option)]
+        # query = Query(userID=current_id, query_count=query_count+1, query_text=query_text,
+        #               query_duration=query_duration, query_difficulty=query_difficulty,
+        #               query_free_option=query_free_option)
+        # db.session.add(query)
+        # db.session.commit()
+        # print(query_input)
+        # query_courses = recommend(user_input=query_input, rating_data=rating_data,
+        #                           tfidf_vectorizer=tfidf_vectorizer, tfidf_data=tfidf_data,
+        #                           categorical_data=categorical_data)
         flash('Got your preferences!', category='success')
-        return redirect(url_for('results'))
+        # print(1)
+        # print(query_courses)
+        return redirect(url_for('results', query_text=query_text, query_duration=query_duration,
+                                query_difficulty=query_difficulty, query_free_option=query_free_option))
     return render_template('query.html', form=form, title=title, preferences=True)
 
 
 @app.route('/results', methods=['GET', 'POST'])
+@login_required
 def results():
+    if not current_user.is_authenticated:
+        return redirect(url_for('/'))
+    query_text = request.args.get('query_text')
+    query_duration = request.args.get('query_duration')
+    query_difficulty = request.args.get('query_difficulty')
+    query_free_option = request.args.get('query_free_option')
+    if (query_text is None) | (query_duration is None) | (query_difficulty is None) | (query_free_option is None):
+        return redirect(url_for('preferences'))
     current_id = current_user.userID
-    recommendations = Recommendation().query.filter_by(userID=current_id).order_by(Recommendation.query_count.desc()).\
-        order_by(Recommendation.ranking.asc())
+    # Save query to database
+    count = Query.query.filter_by(userID=current_id).order_by(Query.query_count.desc()).first()
+    if count is None:
+        query_count = 0
+    else:
+        query_count = int(count.query_count)
+    query = Query(userID=current_id, query_count=query_count + 1, query_text=query_text,
+                  query_duration=query_duration, query_difficulty=query_difficulty,
+                  query_free_option=query_free_option)
+    db.session.add(query)
+    db.session.commit()
+    # Extract recommended courses
+    query_input = [query_text, int(query_duration), int(query_difficulty), int(query_free_option)]
+    query_courses = recommend(user_input=query_input, rating_data=rating_data,
+                              tfidf_vectorizer=tfidf_vectorizer, tfidf_data=tfidf_data,
+                              categorical_data=categorical_data)
+    # recommendations = Recommendation().query.filter_by(userID=current_id).order_by \
+    # (Recommendation.query_count.desc()).order_by(Recommendation.ranking.asc())
+    # Render Query Results
     rec_list = []
-    for item in recommendations:
+    for item in query_courses:
         # Append the course details by courseID
-        rec_list.append(Course.query.filter_by(courseID=item.courseID).first())
+        # rec_list.append(Course.query.filter_by(courseID=item.courseID).first())
+        rec_list.append(Course.query.filter_by(courseID=item).first())
     difficulty = {1: "Beginner", 2: "Intermediate", 3: "Advanced"}
     duration = {1: "Short", 2: "Medium", 3: "Long"}
     free_option = {0: "Paid", 1: "Free"}
@@ -163,7 +201,10 @@ def results():
 
 
 @app.route('/favourites', methods=['GET', 'POST'])
+@login_required
 def favourites():
+    if not current_user.is_authenticated:
+        return redirect(url_for('/'))
     title = 'My favourited courses'
     current_id = current_user.userID
     fav_query = Favourite().query.filter_by(userID=current_id)
@@ -183,7 +224,10 @@ def favourites():
 
 
 @app.route('/history', methods=['GET'])
+@login_required
 def history():
+    if not current_user.is_authenticated:
+        return redirect(url_for('/'))
     title = 'My past searches'
     current_id = current_user.userID
     history_queries = Query().query.filter_by(userID=current_id).order_by(Query.query_count.desc())
@@ -200,7 +244,10 @@ def history():
 
 
 @app.route('/history/<int:query_count>', methods=['GET'])
+@login_required
 def displaypastresult(query_count):
+    if not current_user.is_authenticated:
+        return redirect(url_for('/'))
     title = 'My past searches'
     current_id = current_user.userID
     query_result = Recommendation().query.filter_by(userID=current_id).filter_by(query_count=query_count)
@@ -226,7 +273,10 @@ def displaypastresult(query_count):
 
 
 @app.route('/likeunlike', methods=['POST', 'GET'])
+@login_required
 def likeunlike():
+    if not current_user.is_authenticated:
+        return redirect(url_for('/'))
     current_id = current_user.userID
     if request.method == 'POST':
         course_id = request.form['course_id']

@@ -2,7 +2,6 @@
 # Takes user input and returns a sorted list of recommended courses.
 
 # Initialize Library Setup
-import pickle
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 
@@ -47,7 +46,10 @@ def recommend(user_input, rating_data, tfidf_vectorizer, tfidf_data, categorical
     # 5. Apply Batch Ranking using rating data
     rec_id = utils.batch_rank(sorted_id, rating_data, config.batch_size)[:config.recommend_topn]
 
-    return sorted_sim, sorted_id, rec_id
+    # 6. Convert to courseID
+    rec_courses = [int(x+1) for x in rec_id]
+
+    return rec_courses
 
 
 def recommend_default(rating_data):
