@@ -1,3 +1,5 @@
+import numpy as np
+
 from flask import render_template, flash, redirect, url_for, request, jsonify
 from flask_login import login_user, login_required, current_user, logout_user
 
@@ -5,17 +7,31 @@ from SystemCode.frontend import app, bcrypt, db
 from SystemCode.frontend.forms import SignupForm, LoginForm, SurveyForm
 from SystemCode.frontend.models import User, Query, Course, Favourite, Recommendation
 
+from SystemCode import config
+from SystemCode.recommendation import utils
+from SystemCode.recommendation.recommend import recommend_default
+from SystemCode.recommendation.recommend import recommend
 
-default10 = [1,200,300,400,500,600,700,1800,2900,5000]
 
+# Initialize for Default 10 most popular courses
+rating_tuples = db.session.query(Course.popularity_index).all()
+rating_data = np.array([x[0] for x in rating_tuples])
+default_courses = recommend_default(rating_data)
 
+# Initialized Data for Recommender Module
+tfidf_vectorizer = utils.load_pickle(config.tfidf_vectorizer_filepath)
+tfidf_data = utils.load_pickle(config.tfidf_data_filepath)
+categorical_data = utils.load_pickle(config.categorical_data_filepath)
+recommend_courses = []
+
+# Landing Page Initilization
 @app.route('/')
 def index():
     if current_user.is_authenticated:
         return redirect(url_for('home'))
     title = 'MOOC Recommender'
     defaultcourselist = []
-    for item in default10:
+    for item in default_courses:
         # Append the course details by courseID
         defaultcourselist.append(Course.query.filter_by(courseID=item).first())
     difficulty = {0: "Beginner", 1: "Intermediate", 2: "Advanced"}
@@ -30,6 +46,7 @@ def index():
     return render_template('index.html', title=title,  defaultcourselist=defaultcourselist, index=True)
 
 
+# Home Page for signed in User
 @app.route('/home')
 @login_required
 def home():
@@ -38,7 +55,7 @@ def home():
     title = 'MOOC Recommender'
     current_id = current_user.userID
     defaultcourselist = []
-    for item in default10:
+    for item in default_courses:
         # Append the course details by courseID
         defaultcourselist.append(Course.query.filter_by(courseID=item).first())
     difficulty = {0: "Beginner", 1: "Intermediate", 2: "Advanced"}

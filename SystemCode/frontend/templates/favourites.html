@@ -29,7 +29,7 @@
                     <div class="panel panel-default" style="border:1px solid">
                         <div class="row no-gutters">
                             <div class="col-sm-6">
-                                <img class="panel-img rounded" src={{course.imageLink}} alt="Card image cap">
+                                <img class="panel-img rounded" src={{course.image_url}} alt="Card image cap">
                             </div>
                             <div class="col-sm-6">
                                 <div class="panel-heading">
@@ -41,7 +41,7 @@
                                 <p>Difficulty: {{ course.difficulty }}</p>
                                 <p>Duration: {{ course.duration }}</p>
                                 <p>{{ course.free_option }}</p>
-                                <a href="{{ course.link }}" class="btn btn-primary">More info</a>
+                                <a href="{{ course.url }}" class="btn btn-primary">More info</a>
                                 <button id="swapHeart" class="btn btn-default swap">
                                     <span class="glyphicon glyphicon-heart" style="color:red;box-shadow:none;"></span>
                                 </button>

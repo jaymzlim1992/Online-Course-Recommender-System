@@ -55,11 +55,11 @@ def categorical_encode(categorical_input):
 
 # 3) TfIdf Vectorizer:
 # Takes list of tokens as input and apply TfIdf Vectorization based on the pretrained dictionary.
-def tfidf_vectorize(text):
+def tfidf_vectorize(text, vectorizer):
     # Load Tfidf Vectorizer
-    vectorizer_file = open(config.tfidf_vectorizer_filepath, 'rb')
-    vectorizer = pickle.load(vectorizer_file)
-    vectorizer_file.close()
+    # vectorizer_file = open(config.tfidf_vectorizer_filepath, 'rb')
+    # vectorizer = pickle.load(vectorizer_file)
+    # vectorizer_file.close()
     tfidf = vectorizer.transform([text])
     return tfidf
 
@@ -117,3 +117,11 @@ def batch_rank(sort_filtered_id, rating, batch_size):
         ranked = np.append(ranked, ranked_batch_id).astype(int)
 
     return ranked
+
+
+# 7) Load-up Pickle Object Data Files
+def load_pickle(filename):
+    data_file = open(filename, 'rb')
+    data = pickle.load(data_file)
+    data_file.close()
+    return data
