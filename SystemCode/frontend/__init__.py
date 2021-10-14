@@ -4,7 +4,7 @@ from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 
-from SystemCode.config import WebappConfig
+from config import WebappConfig
 
 app = Flask(__name__)
 app.config.from_object(WebappConfig)

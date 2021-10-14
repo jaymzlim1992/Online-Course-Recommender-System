@@ -1,6 +1,6 @@
 from flask_login import UserMixin
 
-from SystemCode.frontend import db, login
+from frontend import db, login
 
 
 @login.user_loader

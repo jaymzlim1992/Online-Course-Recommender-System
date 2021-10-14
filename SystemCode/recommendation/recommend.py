@@ -5,8 +5,8 @@
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 
-from SystemCode.recommendation import utils
-from SystemCode import config
+from recommendation import utils
+import config
 
 
 # Recommend Function
