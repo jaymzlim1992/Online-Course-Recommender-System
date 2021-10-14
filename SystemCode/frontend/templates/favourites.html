@@ -31,10 +31,9 @@
                                 <p>Duration: {{ course.duration }}</p>
                                 <p>{{ course.free_option }}</p>
                                 <a href="{{ course.url }}" class="btn btn-primary">More info</a>
-                                <button id="swapHeart" class="btn btn-default swap">
-                                    <span class="glyphicon glyphicon-heart" style="color:red;box-shadow:none;"></span>
+                                <button id="{{course.courseID}}" class="btn btn-default swap favouriteButton">
+                                    <span class="glyphicon glyphicon-heart"></span>
                                 </button>
-                                <input type="button" value="Unlike" class="unlike" id="unlike_{{course.courseID}}" />
                                 </div>
                             </div>
                         </div>

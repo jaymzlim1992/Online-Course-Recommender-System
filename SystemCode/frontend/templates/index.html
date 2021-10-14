@@ -30,17 +30,13 @@
                             <div class="col-md-3">
                                 <a href="{{course.url}}" class="btn btn-primary pull-right">More info</a>
                                 {% if home %}
+                                    <button class="btn btn-default swap pull-right favouriteButton" type="button"  id="{{course.courseID}}">
                                     {% if course.courseID in favlist %}
-                                        <button class="btn btn-default swap pull-right">
-                                            <span class="glyphicon glyphicon-heart" style="color:red;box-shadow:none;"></span>
-                                        </button>
-                                        <input type="button" value="Unlike" class="unlike" id="unlike_{{course.courseID}}" />
+                                        <span class="glyphicon glyphicon-heart"></span>
                                     {% else %}
-                                        <button class="btn btn-default swap pull-right">
-                                            <span class="glyphicon glyphicon-heart-empty" style="box-shadow:none;"></span>
-                                        </button>
-                                        <input type="button" value="Like" class="like" id="like_{{course.courseID}}" />
+                                        <span class="glyphicon glyphicon-heart-empty"></span>
                                     {% endif %}
+                                    </button>
                                 {% endif %}
                             </div>
                         </div>
