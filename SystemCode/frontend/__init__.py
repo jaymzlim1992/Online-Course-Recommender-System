@@ -4,7 +4,7 @@ from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 
-from config import WebappConfig
+from SystemCode.config import WebappConfig
 
 app = Flask(__name__)
 app.config.from_object(WebappConfig)
@@ -18,4 +18,4 @@ login.login_message = 'You must login to access this page'
 login.login_message_category = 'info'
 
 
-from frontend.routes import *
+from SystemCode.frontend.routes import *

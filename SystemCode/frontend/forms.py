@@ -3,7 +3,7 @@ from wtforms import StringField, PasswordField, SubmitField, BooleanField, Radio
     validators, SelectField
 from wtforms.validators import DataRequired, Length, ValidationError
 
-from frontend.models import User
+from SystemCode.frontend.models import User
 
 
 class SignupForm(FlaskForm):

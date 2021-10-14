@@ -3,14 +3,14 @@ import numpy as np
 from flask import render_template, flash, redirect, url_for, request, jsonify
 from flask_login import login_user, login_required, current_user, logout_user
 
-from frontend import app, bcrypt, db
-from frontend.forms import SignupForm, LoginForm, SurveyForm
-from frontend.models import User, Query, Course, Favourite, Recommendation
+from SystemCode.frontend import app, bcrypt, db
+from SystemCode.frontend.forms import SignupForm, LoginForm, SurveyForm
+from SystemCode.frontend.models import User, Query, Course, Favourite, Recommendation
 
-import config
-from recommendation import utils
-from recommendation.recommend import recommend_default
-from recommendation.recommend import recommend
+from SystemCode import config
+from SystemCode.recommendation import utils
+from SystemCode.recommendation.recommend import recommend_default
+from SystemCode.recommendation.recommend import recommend
 
 
 # Initialize for Default 10 most popular courses
