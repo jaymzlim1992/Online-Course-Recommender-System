@@ -26,6 +26,7 @@ class Query(db.Model, UserMixin):
     queryID = db.Column(db.Integer, primary_key=True)
     query_count = db.Column(db.Integer, nullable=False)
     userID = db.Column(db.Integer, nullable=False)
+    query_data = db.Column(db.DateTime, nullable=False)
     query_text = db.Column(db.String(200))
     query_duration = db.Column(db.Integer, nullable=False)
     query_difficulty = db.Column(db.Integer)
