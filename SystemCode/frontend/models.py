@@ -1,4 +1,5 @@
 from flask_login import UserMixin
+from datetime import datetime
 
 from frontend import db, login
 
@@ -26,6 +27,7 @@ class Query(db.Model, UserMixin):
     queryID = db.Column(db.Integer, primary_key=True)
     query_count = db.Column(db.Integer, nullable=False)
     userID = db.Column(db.Integer, nullable=False)
+    query_time = db.Column(db.DateTime, default=datetime.utcnow)
     query_text = db.Column(db.String(200))
     query_duration = db.Column(db.Integer, nullable=False)
     query_difficulty = db.Column(db.Integer)
