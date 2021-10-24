@@ -28,7 +28,7 @@
                                 <h6>{{ course.free_option }}</h6>
                             </div>
                             <div class="col-md-3">
-                                <a href="{{course.url}}" class="btn btn-primary pull-right">More info</a>
+                                <a href="{{course.url}}" class="btn btn-primary pull-right" target="_blank" rel="noopener noreferrer">More info</a>
                                 {% if home %}
                                     <button class="btn btn-default swap pull-right favouriteButton" type="button"  id="{{course.courseID}}">
                                     {% if course.courseID in favlist %}
