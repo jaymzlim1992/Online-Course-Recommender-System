@@ -14,7 +14,7 @@ from recommendation.recommend import recommend
 
 
 # Initialize for Default 10 most popular courses
-rating_tuples = db.session.query(Course.popularity_index).all()
+rating_tuples = db.session.query(Course.popularity_index).order_by(Course.courseID)
 rating_data = np.array([x[0] for x in rating_tuples])
 default_courses = recommend_default(rating_data)
 
@@ -163,8 +163,6 @@ def query():
 
         # Redirect and pass-on user inputs for inferrence in results route
         flash('Got your preferences!', category='success')
-        print(1)
-        print(query_courses)
         return redirect(url_for('results', query_text=query_text, query_duration=query_duration,
                                 query_difficulty=query_difficulty, query_free_option=query_free_option))
 
@@ -196,8 +194,6 @@ def results():
     query_courses = recommend(user_input=query_input, rating_data=rating_data,
                               tfidf_vectorizer=tfidf_vectorizer, tfidf_data=tfidf_data,
                               categorical_data=categorical_data)
-    print(2)
-    print(query_courses)
     rec_list = []
     for item in query_courses:
         rec_list.append(Course.query.filter_by(courseID=item).first())
