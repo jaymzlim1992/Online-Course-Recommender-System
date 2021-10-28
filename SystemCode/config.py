@@ -24,8 +24,8 @@ tfidf_vectorizer_filepath = os.path.join(basedir, 'recommendation/featurematrix/
 # TEXT BASED RECOMMENDATION THRESHOLD
 text_thres = 0
 # MINIMUM FREE COURSE COUNT THRESHOLD
-free_show_thres = 50
+free_show_thres = 20
 # RECOMMENDATION RESULTS SIZE
-recommend_topn = 20
+recommend_topn = 50
 # DEFAULT POPULAR RESULTS SIZE
 recommend_default_topn = 20
