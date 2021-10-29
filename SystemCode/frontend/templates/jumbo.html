@@ -20,25 +20,25 @@
     {% elif home %}
       <a class="btn btn-primary btn-lg" href = "{{ url_for('home') }}" role="button">Home</a>
       <a class="btn btn-default btn-lg" href="{{ url_for('query') }}" role="button">Get Personalized Recommendation</a>
-      <a class="btn btn-default btn-lg" href = "{{ url_for('favourites') }}" role="button">My favourites</a>
+      <a class="btn btn-default btn-lg" href = "{{ url_for('favourites') }}" role="button">My Favourites</a>
       <a class="btn btn-default btn-lg" href = "{{ url_for('history') }}" role="button">History</a>
       <a class="btn btn-default btn-lg" href="{{ url_for('logout') }}">Logout</a>
     {% elif query %}
       <a class="btn btn-default btn-lg" href = "{{ url_for('home') }}" role="button">Home</a>
       <a class="btn btn-primary btn-lg" href="{{ url_for('query') }}" role="button">Get Personalized Recommendation</a>
-      <a class="btn btn-default btn-lg" href = "{{ url_for('favourites') }}" role="button">My favourites</a>
+      <a class="btn btn-default btn-lg" href = "{{ url_for('favourites') }}" role="button">My Favourites</a>
       <a class="btn btn-default btn-lg" href = "{{ url_for('history') }}" role="button">History</a>
       <a class="btn btn-default btn-lg" href="{{ url_for('logout') }}">Logout</a>
     {% elif favourites %}
       <a class="btn btn-default btn-lg" href = "{{ url_for('home') }}" role="button">Home</a>
       <a class="btn btn-default btn-lg" href="{{ url_for('query') }}" role="button">Get Personalized Recommendation</a>
-      <a class="btn btn-primary btn-lg" href = "{{ url_for('favourites') }}" role="button">My favourites</a>
+      <a class="btn btn-primary btn-lg" href = "{{ url_for('favourites') }}" role="button">My Favourites</a>
       <a class="btn btn-default btn-lg" href = "{{ url_for('history') }}" role="button">History</a>
       <a class="btn btn-default btn-lg" href="{{ url_for('logout') }}">Logout</a>
     {% elif history %}
       <a class="btn btn-default btn-lg" href = "{{ url_for('home') }}" role="button">Home</a>
       <a class="btn btn-default btn-lg" href="{{ url_for('query') }}" role="button">Get Personalized Recommendation</a>
-      <a class="btn btn-default btn-lg" href = "{{ url_for('favourites') }}" role="button">My favourites</a>
+      <a class="btn btn-default btn-lg" href = "{{ url_for('favourites') }}" role="button">My Favourites</a>
       <a class="btn btn-primary btn-lg" href = "{{ url_for('history') }}" role="button">History</a>
       <a class="btn btn-default btn-lg" href="{{ url_for('logout') }}">Logout</a>
     {% endif %}
