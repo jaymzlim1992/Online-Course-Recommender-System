@@ -18,4 +18,4 @@ login.login_message = 'You must login to access this page'
 login.login_message_category = 'info'
 
 
-from SystemCode.frontend.routes import *
+from frontend.routes import *
