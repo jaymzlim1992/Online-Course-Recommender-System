@@ -1,41 +1,44 @@
 {% extends 'base.html' %}
 
 {% block navbar %}
+    <div class="jumbotron" style="background-color:#c8d8e4">
     {% include 'jumbo.html' %}
+    </div>
 {% endblock %}
 
 {% block content %}
     <div class="container">
-        <div class="row">
-            <h1>Favourited courses</h1>
-        </div>
+            <h2>Your collection of courses</h2>
+            <br>
         {% if fav_list|length == 0 %}
-            <h5>You do not have any favourite courses.</h5>
+            <h5>You do not have any liked courses yet.</h5>
         {% endif %}
         {% for course in fav_list %}
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="panel panel-default" style="border:1px solid">
-                        <div class="row no-gutters">
-                            <div class="col-sm-6">
-                                <img class="panel-img rounded" src={{course.image_url}} alt="Card image cap">
+            <div class="card text-left">
+                <div class="panel panel-default" style="background-color:white">
+                    <div class="row justify-content-center">
+                        <div class="col-md-4">
+                            <img class="panel-img rounded" src={{course.image_url}} alt="Card image cap">
+                        </div>
+                        <div class="col-md-8">
+                        <div class="panel-heading">
+                                <h3 class="panel-title">{{ course.title }}</h3>
+                                <h6>{{ course.platform }} | offered by {{course.provider}}</h6>
+                        </div>
+                        <div class="panel-body">
+                            <div class="col-md-9">
+                                <h6>Language: {{ course.language }} | Subtitles: {{course.subtitle}}</h6>
+                                <h6>Difficulty: {{ course.difficulty }}</h6>
+                                <h6>Duration: {{ course.duration }}</h6>
+                                <h6>{{ course.free_option }}</h6>
                             </div>
-                            <div class="col-sm-6">
-                                <div class="panel-heading">
-                                    <h3 class = "panel-title">{{ course.title }}</h3>
-                                </div>
-                                <div class="panel-body">
-                                <p>{{ course.platform }} | offered by {{course.provider}}</p>
-                                <p>Language: {{ course.language }} | Subtitles: {{course.subtitle}}</p>
-                                <p>Difficulty: {{ course.difficulty }}</p>
-                                <p>Duration: {{ course.duration }}</p>
-                                <p>{{ course.free_option }}</p>
-                                <a href="{{ course.url }}" class="btn btn-primary" target="_blank" rel="noopener noreferrer">More info</a>
-                                <button id="{{course.courseID}}" class="btn btn-default swap favouriteButton">
-                                    <span class="glyphicon glyphicon-heart"></span>
-                                </button>
-                                </div>
+                            <div class="col-md-3">
+                                <a href="{{ course.url }}" class="btn btn-primary pull-right" target="_blank" rel="noopener noreferrer">More info</a>
+                                    <button class="btn btn-default swap pull-right favouriteButton" type="button"  id="{{course.courseID}}">
+                                        <span class="glyphicon glyphicon-heart"></span>
+                                    </button>
                             </div>
+                        </div>
                         </div>
                     </div>
                 </div>

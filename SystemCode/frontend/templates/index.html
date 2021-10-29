@@ -1,16 +1,18 @@
 {% extends 'base.html' %}
 
 {% block navbar %}
+    <div class="jumbotron" style="background-color:#c8d8e4">
     {% include 'jumbo.html' %}
+    </div>
 {% endblock %}
 
 {% block app_content %}
 
-    <h3>Here are some popular top-ranked courses you might like:</h3>
-
+    <h2>Here are some popular courses</h2>
+    <br>
         {% for course in defaultcourselist %}
-            <div class="container-fluid">
-                <div class="panel panel-default" style="border:1px solid">
+            <div class="card text-left">
+                <div class="panel panel-default" style="background-color:white">
                     <div class="row justify-content-center">
                         <div class="col-md-4">
                             <img class="panel-img rounded" src={{course.image_url}} alt="Card image cap">

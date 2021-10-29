@@ -1,29 +1,35 @@
 {% extends 'base.html' %}
 
 {% block navbar %}
+    <div class="jumbotron" style="background-color:#c8d8e4">
     {% include 'jumbo.html' %}
+    </div>
 {% endblock %}
 
 {% block app_content %}
 
-    <h3>Here are your past searches:</h3>
-
-        {% for query in history_queries %}
-            <div class="container">
-                <div class="panel panel-default" style="border:1px solid">
+    <h2>Your recent searches</h2>
+    <br>
+        {% for i in range(nquery) %}
+            <div class="card text-left">
+                <div class="panel panel-default" style="background-color:white" >
                     <div class="row text-center">
-                        <div class="col-md-4">
-                            <h2>Search: {{ query.query_count }}</h2>
+                        <div class="col-md-3">
+                            <h3>Search Time</h3>
+                            <h4><i>{{ output_list[i][4] }}</i></h4>
                         </div>
                         <div class="panel-body text-left">
-                            <div class="col-md-4">
-                                <h4>Topic: {{ query.query_text }}</h4>
-                                <h4>Duration: {{  query.query_duration  }}</h4>
+                            <div class="col-md-3">
+                                <h4>Topic: {{ output_list[i][0] }}</h4>
+                                <h4>Duration: {{  output_list[i][1]  }}</h4>
                             </div>
-                            <div class="col-md-4">
-                                <h4>Difficulty: {{ query.query_difficulty }}</h4>
-                                <h4>Free/Paid: {{  query.query_free_option  }}</h4>
-                                <a href="/history/{{ query.query_count }}" class="btn btn-primary pull-right">More Details</a>
+                            <div class="col-md-5">
+                                <h4>Difficulty: {{ output_list[i][2] }}</h4>
+                                <h4>Free/Paid: {{  output_list[i][3]  }}</h4>
+                            </div>
+                            <div class="col-md-1">
+                                <br>
+                                <a href="/history/{{ output_list[i][5] }}" class="btn btn-primary pull-right">Show Results</a>
                             </div>
                         </div>
                         </div>

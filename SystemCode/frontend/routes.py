@@ -11,7 +11,8 @@ import config
 from recommendation import utils
 from recommendation.recommend import recommend_default
 from recommendation.recommend import recommend
-
+from datetime import datetime
+import pytz
 
 # Initialize for Default 10 most popular courses
 rating_tuples = db.session.query(Course.popularity_index).order_by(Course.courseID)
@@ -257,11 +258,27 @@ def history():
     query_free_option = {0: "Free and paid courses", 1: "Only free courses"}
     query_difficulty = {0: "Any", 1: "Beginner", 2: "Intermediate", 3: "Advanced"}
     query_duration = {0: "Any", 1: "Short", 2: "Medium", 3: "Long"}
+    output_list = []
     for ind_query in history_queries:
-        ind_query.query_difficulty = query_difficulty.get(ind_query.query_difficulty, "Unknown")
-        ind_query.query_duration = query_duration.get(ind_query.query_duration, "Unknown")
-        ind_query.query_free_option = query_free_option.get(ind_query.query_free_option, "Unknown")
-    return render_template('history.html', title=title, history_queries=history_queries, history=True)
+        # ind_query.query_difficulty = query_difficulty.get(ind_query.query_difficulty, "Unknown")
+        # ind_query.query_duration = query_duration.get(ind_query.query_duration, "Unknown")
+        # ind_query.query_free_option = query_free_option.get(ind_query.query_free_option, "Unknown")
+        difficulty = query_difficulty.get(ind_query.query_difficulty, "Unknown")
+        duration = query_duration.get(ind_query.query_duration, "Unknown")
+        free_option = query_free_option.get(ind_query.query_free_option, "Unknown")
+        past_time = datetime.utcnow()-ind_query.query_time
+        if past_time.days > 0:
+            time_string = str(int(past_time.days)) + " days ago"
+        elif past_time.seconds > 3600:
+            time_string = str(int(past_time.seconds/3600)) + " hours ago"
+        elif past_time.seconds > 60:
+            time_string = str(int(past_time.seconds / 60)) + " minutes ago"
+        else:
+            time_string = str(int(past_time.seconds)) + " seconds ago"
+        output = [ind_query.query_text,duration, difficulty, free_option, time_string , ind_query.query_count]
+        output_list.append(output)
+    nquery = len(output_list)
+    return render_template('history.html', title=title, output_list=output_list, nquery=nquery, history=True)
 
 
 @app.route('/history/<int:query_count>', methods=['GET'])

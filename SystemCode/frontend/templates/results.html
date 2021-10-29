@@ -1,18 +1,21 @@
 {% extends 'base.html' %}
 
 {% block navbar %}
+    <div class="jumbotron" style="background-color:#c8d8e4">
     {% include 'jumbo.html' %}
+    </div>
 {% endblock %}
 
 {% block app_content %}
-    {% if results %} <!-- to display the results of a new search -->
-        <h3>Here are the recommended courses based on your search:</h3>
+    {% if query %} <!-- to display the results of a new search -->
+        <h2>Here are the recommendations based on your preferences</h2>
     {% else %} <!-- to display the results (course and details) of a past search in a searchId -->
-        <h3>Here are the courses recommended in search {{ query_count }}:</h3>
+        <h2>Here are the recommendations based on your previous search</h2>
     {% endif %}
+        <br>
         {% for course in rec_list %}
-            <div class="container-fluid">
-                <div class="panel panel-default" style="border:1px solid">
+            <div class="card text-left">
+                <div class="panel panel-default" style="background-color:white">
                     <div class="row justify-content-center">
                         <div class="col-md-4">
                             <img class="panel-img rounded" src={{course.image_url}} alt="Card image cap">

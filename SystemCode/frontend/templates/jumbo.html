@@ -1,5 +1,4 @@
-<div class="jumbotron">
-  <div class="container">
+<div class="container">
 
     <h1>Welcome{% if current_user.username %} {{current_user.name}}{% endif %}!</h1>
 
@@ -43,5 +42,4 @@
         <a class="btn btn-primary btn-lg" href = "{{ url_for('history') }}" role="button">History</a>
         <a class="btn btn-default btn-lg" href="{{ url_for('logout') }}">Logout</a>
     {% endif %}
-  </div>
 </div>

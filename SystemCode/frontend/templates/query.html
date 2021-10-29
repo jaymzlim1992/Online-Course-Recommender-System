@@ -1,16 +1,21 @@
 {% extends 'base.html' %}
 
 {% block navbar %}
+    <div class="jumbotron" style="background-color:#c8d8e4">
     {% include 'jumbo.html' %}
+    </div>
 {% endblock %}
 
 {% block app_content %}
- <h2>Let us know your preferences below:</h2>
- <br>
- <div class="row">
-   <div class="col-md-6">
-    {% import 'bootstrap/wtf.html' as wtf %}
-       {{ wtf.quick_form(form) }}
-   </div>
- </div>
+<div class="container" style="background-color:white">
+    <h2>Let us know your preferences below</h2>
+    <br>
+    <div class="row">
+        <div class="col-md-6" style="color:black">
+            {% import 'bootstrap/wtf.html' as wtf %}
+            {{ wtf.quick_form(form) }}
+        </div>
+    </div>
+    <br>
+</div>
 {% endblock %}
