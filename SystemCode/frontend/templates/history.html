@@ -8,33 +8,37 @@
 
 {% block app_content %}
 
-    <h2>Your recent searches</h2>
-    <br>
-        {% for i in range(nquery) %}
-            <div class="card text-left">
-                <div class="panel panel-default" style="background-color:white" >
-                    <div class="row text-center">
-                        <div class="col-md-3">
-                            <h3>Search Time</h3>
-                            <h4><i>{{ output_list[i][4] }}</i></h4>
-                        </div>
-                        <div class="panel-body text-left">
-                            <div class="col-md-3">
-                                <h4>Topic: {{ output_list[i][0] }}</h4>
-                                <h4>Duration: {{  output_list[i][1]  }}</h4>
-                            </div>
-                            <div class="col-md-5">
-                                <h4>Difficulty: {{ output_list[i][2] }}</h4>
-                                <h4>Free/Paid: {{  output_list[i][3]  }}</h4>
-                            </div>
-                            <div class="col-md-1">
-                                <br>
-                                <a href="/history/{{ output_list[i][5] }}" class="btn btn-primary pull-right">Show Results</a>
-                            </div>
-                        </div>
-                        </div>
-                    </div>
+<h2>Your recent searches</h2>
+<br>
+{% if output_list|length == 0 %}
+    <h5><i>You do not have any search yet</i></h5>
+{% endif %}
+
+{% for i in range(nquery) %}
+<div class="card text-left">
+    <div class="panel panel-default" style="background-color:white" >
+        <div class="row text-center">
+            <div class="col-md-3">
+                <h3>Search Time</h3>
+                <h4><i>{{ output_list[i][4] }}</i></h4>
+            </div>
+            <div class="panel-body text-left">
+                <div class="col-md-3">
+                    <h4>Topic: {{ output_list[i][0] }}</h4>
+                    <h4>Duration: {{  output_list[i][1]  }}</h4>
                 </div>
+                <div class="col-md-5">
+                    <h4>Difficulty: {{ output_list[i][2] }}</h4>
+                    <h4>Free/Paid: {{  output_list[i][3]  }}</h4>
+                </div>
+                <div class="col-md-1">
+                    <br>
+                    <a href="/history/{{ output_list[i][5] }}" class="btn btn-primary pull-right">Show Results</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
         {% endfor %}
 
 {% endblock %}

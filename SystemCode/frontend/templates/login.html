@@ -7,16 +7,20 @@
 {% endblock %}
 
 {% block app_content %}
- <h1>Login</h1>
- <br>
- <div class="row">
-   <div class="col-md-6">
-    {% import 'bootstrap/wtf.html' as wtf %}
-       {{ wtf.quick_form(form) }}
-   </div>
- </div>
+<h2>Login</h2>
+<br>
+<div class="container" style="background-color:white">
+    <br>
+    <div class="row">
+        <div class="col-md-6">
+            {% import 'bootstrap/wtf.html' as wtf %}
+            {{ wtf.quick_form(form) }}
+        </div>
+    </div>
     <div>
-        <p></p>
+        <br>
         <a href="{{ url_for('signup') }}">Not yet registered? Sign up here</a>
     </div>
+    <br>
+</div>
 {% endblock %}

@@ -11,7 +11,7 @@
             <h2>Your collection of courses</h2>
             <br>
         {% if fav_list|length == 0 %}
-            <h5>You do not have any liked courses yet.</h5>
+            <h5><i>You do not have any liked courses</i></h5>
         {% endif %}
         {% for course in fav_list %}
             <div class="card text-left">

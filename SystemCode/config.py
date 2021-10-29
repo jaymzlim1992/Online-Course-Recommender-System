@@ -28,4 +28,4 @@ free_show_thres = 20
 # RECOMMENDATION RESULTS SIZE
 recommend_topn = 50
 # DEFAULT POPULAR RESULTS SIZE
-recommend_default_topn = 20
+recommend_default_topn = 50
