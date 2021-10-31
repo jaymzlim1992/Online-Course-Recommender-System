@@ -64,9 +64,9 @@ def tfidf_vectorize(text, vectorizer):
 # Takes 2 vectors and calculate cosine similarity
 def cond_sim(input_vec, data_vec):
     input_durr = input_vec[:, :3]
-    input_diff = input_vec[:, 3]
+    input_diff = input_vec[:, 3:]
     data_durr = data_vec[:, :3]
-    data_diff = data_vec[:, 3]
+    data_diff = data_vec[:, 3:6]
     if (input_diff.sum() + input_durr.sum()) == 0:
         sim = np.ones(data_vec.shape[0])
     elif input_durr.sum() == 0:

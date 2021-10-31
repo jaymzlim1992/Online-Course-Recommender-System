@@ -174,6 +174,7 @@ def query():
 @app.route('/results', methods=['GET', 'POST'])
 @login_required
 def results():
+    title = 'Recommendation Results'
     # Check if user is signed in
     if not current_user.is_authenticated:
         return redirect(url_for('/'))
@@ -213,7 +214,7 @@ def results():
         course.duration = duration.get(course.duration, "Unknown")
         course.free_option = free_option.get(course.free_option, "Unknown")
         course.platform = platform.get(course.platform, "Unknown")
-    return render_template('results.html', rec_list=rec_list, favlist=favlist, query=True)
+    return render_template('results.html', title=title, rec_list=rec_list, favlist=favlist, query=True)
 
 
 @app.route('/favourites', methods=['GET', 'POST'])
