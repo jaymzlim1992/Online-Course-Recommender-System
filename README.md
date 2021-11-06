@@ -37,7 +37,7 @@ The first version of our Online Course Recommender System serves as a prototype 
 IRS-PM - Online Course Recommender System - Promotional Presentation
   
 <a href="https://www.youtube.com/watch?v=nqYWZMIf6C8">
-<img src="Miscellaneous/Technical Video - Image.png"
+<img src="Miscellaneous/Technical Presentation - Image.jpg"
      style="float: left; margin-right: 0px;" />
 </a>
 
