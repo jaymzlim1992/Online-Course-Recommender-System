@@ -21,9 +21,9 @@ The first version of our Online Course Recommender System serves as a prototype 
 
 | Official Full Name  | Student ID (MTech Applicable)  | Work Items (Who Did What) | Email (Optional) |
 | :------------ |:---------------:| :-----| :-----|
-| Lim Jun Ming | A0231523U | Recommendation Module, Frontend | e0703555@u.nus.edu |
-| Sarah Elita Shi Yuan Wong | A0231507N | Frontend, Database | e0703539@u.nus.edu |
-| Zhang Yunduo | A0231349H | Frontend, Recommendation Module| e0703381@u.nus.edu |
+| Lim Jun Ming | A0231523U | Knowledge Model, Recommendation Module, Frontend | e0703555@u.nus.edu |
+| Sarah Elita Shi Yuan Wong | A0231507N | Knowledge Model, Database, Frontend | e0703539@u.nus.edu |
+| Zhang Yunduo | A0231349H | Knowledge Model, Frontend, System Evaluation | e0703381@u.nus.edu |
 
 ---
 
