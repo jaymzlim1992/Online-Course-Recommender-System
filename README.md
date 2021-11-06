@@ -28,8 +28,21 @@ The first version of our Online Course Recommender System serves as a prototype 
 ---
 
 ## SECTION 4 : VIDEO OF SYSTEM MODELLING & USE CASE DEMO
+  
+<a href="https://www.youtube.com/watch?v=HqXFM_iB2zc">
+<img src="Miscellaneous/Promotional Video - Image.png"
+     style="float: left; margin-right: 0px;" />
+</a>
 
-<insert video link>
+IRS-PM - Online Course Recommender System - Promotional Presentation
+  
+<a href="https://www.youtube.com/watch?v=nqYWZMIf6C8">
+<img src="Miscellaneous/Technical Video - Image.png"
+     style="float: left; margin-right: 0px;" />
+</a>
+
+IRS-PM - Online Course Recommender System - Technical Presentation
+
 ---
 
 ## SECTION 5 : USER GUIDE
