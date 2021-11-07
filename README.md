@@ -57,42 +57,42 @@ As the Online Course Recommender WebApp is mainly written in Python, in order to
 #### Windows OS
 Follow and type in the commands below in the command prompt to execute:
   
-1. Create New Conda Environment
+1. Create New Conda Environment<br>
 `conda create --name py39_ocrs python=3.9 -y`
 
-2. Activate The Created Conda Environment
+2. Activate The Created Conda Environment<br>
 `conda activate py39_ocrs`
  
 3. Download and Clone This Github Repository into a Folder
 
-4. Change Directory to the Cloned Github Repository Folder and Go into SystemCode Folder
+4. Change Directory to the Cloned Github Repository Folder and Go into SystemCode Folder<br>
 `cd <path to repo>\SystemCode`
   
-5. Install The Required Python Packages
+5. Install The Required Python Packages<br>
 `pip install -r requirements.txt`
   
-6. Install The NLTK Corpora
+6. Install The NLTK Corpora<br>
 `python nltk_setup.py`
 
   
 #### Linux Ubuntu 20.04
 Follow and type in the commands below in the terminal to execute:
   
-1. Create New Conda Environment
+1. Create New Conda Environment<br>
 `conda create --name py39_ocrs python=3.9 -y`
 
-2. Activate The Created Conda Environment
+2. Activate The Created Conda Environment<br>
 `conda activate py39_ocrs`
  
 3. Download and Clone This Github Repository into a Folder
 
-4. Change Directory to the Cloned Github Repository Folder and Go into SystemCode Folder
+4. Change Directory to the Cloned Github Repository Folder and Go into SystemCode Folder<br>
 `cd <path to repo>\SystemCode`
   
-5. Install The Required Python Packages
+5. Install The Required Python Packages<br>
 `pip install -r requirements.txt`
   
-6. Install The NLTK Corpora
+6. Install The NLTK Corpora<br>
 `python nltk_setup.py`
   
 
@@ -102,26 +102,26 @@ Starting the WebApp is easy, user just need to navigate to the SystemCode folder
 #### Windows OS
 Follow and type in the commands below in the command prompt to execute:
   
-1. Activate The Created Conda Environment
+1. Activate The Created Conda Environment<br>
 `conda activate py39_ocrs`
 
-2. Change Directory to the Cloned Github Repository Folder and Go into SystemCode Folder
+2. Change Directory to the Cloned Github Repository Folder and Go into SystemCode Folder<br>
 `cd <path to repo>\SystemCode`
   
-3. Run The Launching Python File - run.py
+3. Run The Launching Python File - run.py<br>
 `python run.py` 
 
   
 #### Linux Ubuntu 20.04
 Follow and type in the commands below in the terminal to execute:
 
-1. Activate The Created Conda Environment
+1. Activate The Created Conda Environment<br>
 `conda activate py39_ocrs`
 
-2. Change Directory to the Cloned Github Repository Folder and Go into SystemCode Folder
+2. Change Directory to the Cloned Github Repository Folder and Go into SystemCode Folder<br>
 `cd <path to repo>\SystemCode`
   
-3. Run The Launching Python File - run.py
+3. Run The Launching Python File - run.py<br>
 `python run.py`  
   
 
