@@ -124,7 +124,7 @@ Follow and type in the commands below in the terminal to execute:
 3. Run The Launching Python File - run.py<br>
 `python run.py`  
   
-
+For more details on User Manual:
 `Refer to appendix <User Manual Guide> in project report at Github Folder: ProjectReport`
 
 ---
