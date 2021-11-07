@@ -1,7 +1,7 @@
 ---
 ## SECTION 1 : PROJECT TITLE
 ## Online-Course-Recommender-System 
-![GitHub Logo](/Miscellaneous/Home-Page.png)
+!('/Miscellaneous/Home-Page.png')
 
 ## SECTION 2 : EXECUTIVE SUMMARY
 With digital transformation across the world, the education sector has shown positive initiatives to embrace e-learning or online learning in the past decade. The adoption is further accelerated since Covid-19 outbreak. Schools, universities and institutions are forced to shift their operation online in order to comply with safe distancing measure. Inevitably, this has caused an exploding growth the in the online learning market. People are looking for alternatives to bricks and mortars institutions and starting to embrace the convenience of online learning.  
