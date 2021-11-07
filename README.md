@@ -1,5 +1,6 @@
 ---
-## SECTION 1 : Online-Course-Recommender-System 
+## SECTION 1 : PROJECT TITLE
+## Online-Course-Recommender-System 
 An application that recommends online courses based on query
 <insert image link>
 ---
