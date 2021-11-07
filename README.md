@@ -54,7 +54,7 @@ As the Online Course Recommender WebApp is mainly written in Python, in order to
 [**Anaconda**](https://www.anaconda.com/products/individual)
 
 ### Installation Procedure
-#### Windows OS
+#### *Windows OS*
 Follow and type in the commands below in the command prompt to execute:
   
 1. Create New Conda Environment<br>
@@ -75,7 +75,7 @@ Follow and type in the commands below in the command prompt to execute:
 `python nltk_setup.py`
 
   
-#### Linux Ubuntu 20.04
+#### *Linux Ubuntu 20.04*
 Follow and type in the commands below in the terminal to execute:
   
 1. Create New Conda Environment<br>
@@ -99,7 +99,7 @@ Follow and type in the commands below in the terminal to execute:
 ### Launching The Application
 Starting the WebApp is easy, user just need to navigate to the SystemCode folder in the Repository and run with python environment activated
 
-#### Windows OS
+#### *Windows OS*
 Follow and type in the commands below in the command prompt to execute:
   
 1. Activate The Created Conda Environment<br>
@@ -111,8 +111,8 @@ Follow and type in the commands below in the command prompt to execute:
 3. Run The Launching Python File - run.py<br>
 `python run.py` 
 
-  
-#### Linux Ubuntu 20.04
+ 
+#### *Linux Ubuntu 20.04*
 Follow and type in the commands below in the terminal to execute:
 
 1. Activate The Created Conda Environment<br>
