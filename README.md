@@ -2,6 +2,7 @@
 ## SECTION 1 : PROJECT TITLE
 ## Online-Course-Recommender-System 
 An application that recommends online courses based on query
+test
 <insert image link>
 ---
 ## SECTION 2 : EXECUTIVE SUMMARY
