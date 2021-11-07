@@ -55,9 +55,9 @@ IRS-PM - Online Course Recommender System - Technical Presentation
 `Refer to project report at Github Folder: ProjectReport`
 
 ---
-## SECTION 7 : MISCELLANEOUS
+## SECTION 7 : KNOWLEDGE MODELLING
 
-`Refer to Github Folder: Miscellaneous`
+`Refer to Github Folder: KNOWLEDGE MODELLING`
 
 ### Codes for web scraping and data processing 
 *iPynb files used for data processing
