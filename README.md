@@ -135,6 +135,9 @@ For more details on User Manual: <br>
 ---
 ## SECTION 7 : KNOWLEDGE MODELLING
 
+The Knowledge Models are constructed using various series of python files and notebooks.
+They are saved in the following 3 folder structure:
+
 1. Data Mining & Preparation
 2. Database
 3. Feature Extraction 
