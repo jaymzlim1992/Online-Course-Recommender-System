@@ -47,6 +47,29 @@ IRS-PM - Online Course Recommender System - Technical Presentation
 
 ## SECTION 5 : USER GUIDE
 
+### Installation Guide
+As the Online Course Recommender WebApp is mainly written in Python, in order to install and start using the application, Python is required to be install on the user machine. To avoid the complications and version compatibility issues of Python modules, we recommend the user to create a new python or conda environment and to install and run the WebApp in the new environment.
+  
+#### Pre-requisite
+[**Anaconda**](https://www.anaconda.com/products/individual)
+
+#### Installation Procedure
+| Windows OS  | Linux Ubuntu 20.04  |
+| :------------ |:---------------:|
+| conda create --name py39_ocrs python=3.9 -y | conda create --name py39_ocrs python=3.9 -y |
+| conda activate py39_ocrs | conda activate py39_ocrs |
+| cd <path to repo>\SystemCode | cd <path to repo>\SystemCode |
+| pip install -r requirements.txt | pip install -r requirements.txt |
+| python nltk_setup.py | python nltk_setup.py |
+
+#### Launching The Application
+Starting the WebApp is easy, user just need to navigate to the SystemCode folder in the Repository and run with python environment activated
+| Windows OS  | Linux Ubuntu 20.04  |
+| :------------ |:---------------:|
+| conda activate py39_ocrs | conda activate py39_ocrs |
+| cd <path to repo>\SystemCode | cd <path to repo>\SystemCode |
+| python run.py | python run.py |
+
 `Refer to appendix <User Manual Guide> in project report at Github Folder: ProjectReport`
 
 ---
@@ -57,9 +80,10 @@ IRS-PM - Online Course Recommender System - Technical Presentation
 ---
 ## SECTION 7 : KNOWLEDGE MODELLING
 
+1. Data Mining & Preparation
+2. Database
+3. Feature Extraction 
+  
 `Refer to Github Folder: KNOWLEDGE MODELLING`
-
-### Codes for web scraping and data processing 
-*iPynb files used for data processing
 
 ---
