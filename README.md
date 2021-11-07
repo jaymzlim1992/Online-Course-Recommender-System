@@ -50,25 +50,80 @@ IRS-PM - Online Course Recommender System - Technical Presentation
 ### Installation Guide
 As the Online Course Recommender WebApp is mainly written in Python, in order to install and start using the application, Python is required to be install on the user machine. To avoid the complications and version compatibility issues of Python modules, we recommend the user to create a new python or conda environment and to install and run the WebApp in the new environment.
   
-#### Pre-requisite
+### Pre-requisite
 [**Anaconda**](https://www.anaconda.com/products/individual)
 
-#### Installation Procedure
-| Windows OS  | Linux Ubuntu 20.04  |
-| :------------ |:---------------:|
-| conda create --name py39_ocrs python=3.9 -y | conda create --name py39_ocrs python=3.9 -y |
-| conda activate py39_ocrs | conda activate py39_ocrs |
-| cd <path to repo>\SystemCode | cd <path to repo>\SystemCode |
-| pip install -r requirements.txt | pip install -r requirements.txt |
-| python nltk_setup.py | python nltk_setup.py |
+### Installation Procedure
+#### Windows OS
+Follow and type in the commands below in the command prompt to execute:
+  
+1. Create New Conda Environment
+'conda create --name py39_ocrs python=3.9 -y'
 
-#### Launching The Application
+2. Activate The Created Conda Environment
+'conda activate py39_ocrs'
+ 
+3. Download and Clone This Github Repository into a Folder
+
+4. Change Directory to the Cloned Github Repository Folder and Go into SystemCode Folder
+'cd <path to repo>\SystemCode'
+  
+5. Install The Required Python Packages
+'pip install -r requirements.txt'
+  
+6. Install The NLTK Corpora
+'python nltk_setup.py'  
+
+  
+#### Linux Ubuntu 20.04
+Follow and type in the commands below in the terminal to execute:
+  
+1. Create New Conda Environment
+'conda create --name py39_ocrs python=3.9 -y'
+
+2. Activate The Created Conda Environment
+'conda activate py39_ocrs'
+ 
+3. Download and Clone This Github Repository into a Folder
+
+4. Change Directory to the Cloned Github Repository Folder and Go into SystemCode Folder
+'cd <path to repo>\SystemCode'
+  
+5. Install The Required Python Packages
+'pip install -r requirements.txt'
+  
+6. Install The NLTK Corpora
+'python nltk_setup.py'
+  
+
+### Launching The Application
 Starting the WebApp is easy, user just need to navigate to the SystemCode folder in the Repository and run with python environment activated
-| Windows OS  | Linux Ubuntu 20.04  |
-| :------------ |:---------------:|
-| conda activate py39_ocrs | conda activate py39_ocrs |
-| cd <path to repo>\SystemCode | cd <path to repo>\SystemCode |
-| python run.py | python run.py |
+
+#### Windows OS
+Follow and type in the commands below in the command prompt to execute:
+  
+1. Activate The Created Conda Environment
+'conda activate py39_ocrs'
+
+2. Change Directory to the Cloned Github Repository Folder and Go into SystemCode Folder
+'cd <path to repo>\SystemCode'
+  
+3. Run The Launching Python File - run.py
+'python run.py'  
+
+  
+#### Linux Ubuntu 20.04
+Follow and type in the commands below in the terminal to execute:
+
+1. Activate The Created Conda Environment
+'conda activate py39_ocrs'
+
+2. Change Directory to the Cloned Github Repository Folder and Go into SystemCode Folder
+'cd <path to repo>\SystemCode'
+  
+3. Run The Launching Python File - run.py
+'python run.py'  
+  
 
 `Refer to appendix <User Manual Guide> in project report at Github Folder: ProjectReport`
 
